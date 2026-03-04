@@ -122,7 +122,7 @@ class _ToastWidgetState extends State<_ToastWidget>
                 color: widget.isError
                     ? AppColors.error.withValues(alpha: 0.95)
                     : AppColors.primary.withValues(alpha: 0.95),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(8),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.12),

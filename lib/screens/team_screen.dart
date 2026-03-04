@@ -122,7 +122,7 @@ class _TeamScreenState extends State<TeamScreen> {
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(8),
                   color: AppColors.primary.withValues(alpha: 0.1),
                 ),
                 child: Icon(Icons.business, color: AppColors.primary, size: 22),

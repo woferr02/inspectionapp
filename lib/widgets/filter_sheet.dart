@@ -48,7 +48,7 @@ class _FilterSheetState extends State<FilterSheet> {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.surfaceColor(context),
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
         border: Border(
           top: BorderSide(color: AppColors.borderColor(context), width: 1),
         ),

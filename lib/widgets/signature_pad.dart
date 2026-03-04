@@ -78,7 +78,7 @@ class _SignaturePadState extends State<SignaturePad> {
           height: 160,
           width: double.infinity,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(8),
             border: Border.all(
               color: _signed ? AppColors.success : AppColors.borderColor(context),
               width: _signed ? 2 : 1,

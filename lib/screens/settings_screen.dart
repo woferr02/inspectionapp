@@ -460,7 +460,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       context: context,
       backgroundColor: AppColors.surfaceColor(context),
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
       ),
       builder: (ctx) => Padding(
         padding: const EdgeInsets.all(24),
@@ -566,7 +566,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       context: context,
       backgroundColor: AppColors.surfaceColor(context),
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
       ),
       builder: (ctx) => Padding(
         padding: const EdgeInsets.all(24),
@@ -632,7 +632,7 @@ class _ToggleVisual extends StatelessWidget {
         width: 44,
         height: 24,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(8),
           color: value ? AppColors.primary : AppColors.borderColor(context),
         ),
         child: AnimatedAlign(

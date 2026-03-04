@@ -150,7 +150,7 @@ class _InspectionCompleteScreenState extends State<InspectionCompleteScreen>
                             vertical: 12,
                           ),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(8),
                             color: _scoreColor(score).withValues(alpha: 0.1),
                           ),
                           child: Row(

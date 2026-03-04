@@ -8,6 +8,7 @@ import 'package:health_safety_inspection/widgets/app_toast.dart';
 import 'package:health_safety_inspection/widgets/page_header.dart';
 import 'package:health_safety_inspection/widgets/primary_button.dart';
 import 'package:health_safety_inspection/widgets/surface_card.dart';
+import 'package:health_safety_inspection/widgets/tappable.dart';
 
 class InspectionDetailScreen extends StatelessWidget {
   final Inspection inspection;
@@ -156,33 +157,43 @@ class InspectionDetailScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          // Progress summary
                           SurfaceCard(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  current.statusText,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall
-                                      ?.copyWith(
-                                        color: current.statusColor,
-                                        fontWeight: FontWeight.w600,
-                                      ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      current.statusText,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelMedium
+                                          ?.copyWith(
+                                            color: current.statusColor,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      '$completedQuestions / $totalQuestions',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
+                                            color: AppColors.textSecondary(context),
+                                          ),
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(height: AppSpacing.x1),
-                                Text(
-                                  '$completedQuestions of $totalQuestions checks completed',
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                ),
-                                const SizedBox(height: AppSpacing.x1),
+                                const SizedBox(height: 10),
                                 ClipRRect(
-                                  borderRadius: BorderRadius.circular(6),
+                                  borderRadius: BorderRadius.circular(4),
                                   child: LinearProgressIndicator(
-                                    minHeight: 8,
+                                    minHeight: 4,
                                     value: progress,
                                     backgroundColor:
-                                        AppColors.borderColor(context),
+                                        AppColors.dividerColor(context),
                                     valueColor: const AlwaysStoppedAnimation(
                                         AppColors.primary),
                                   ),
@@ -236,78 +247,110 @@ class InspectionDetailScreen extends StatelessWidget {
                             'Sections',
                             style: Theme.of(context)
                                 .textTheme
-                                .titleSmall
-                                ?.copyWith(fontWeight: FontWeight.w600),
+                                .labelMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.6,
+                                  color: AppColors.textTertiary(context),
+                                ),
                           ),
                           const SizedBox(height: AppSpacing.x1),
-                          ...current.sections.map(
-                            (section) => Padding(
-                              padding:
-                                  const EdgeInsets.only(bottom: AppSpacing.x1),
-                              child: Builder(builder: (context) {
-                                final liveCompleted =
-                                    store.sectionCompletedCount(
-                                  inspectionId: current.id,
-                                  sectionId: section.id,
-                                );
-                                final completed =
-                                    liveCompleted > section.completedCount
-                                        ? liveCompleted
-                                        : section.completedCount;
-                                return SurfaceCard(
-                                  onTap: () => Navigator.pushNamed(
-                                    context,
-                                    Routes.sectionDetail,
-                                    arguments: {
-                                      'section': section,
-                                      'inspectionName': current.name,
-                                      'inspection': current,
-                                    },
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              section.name,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyLarge
-                                                  ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.w600),
-                                            ),
-                                            const SizedBox(height: 4),
-                                            Text(
-                                              '$completed/${section.questionCount} completed',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall
-                                                  ?.copyWith(
-                                                    color:
-                                                        AppColors.textSecondary(
-                                                            context),
+                          SurfaceCard(
+                            padding: EdgeInsets.zero,
+                            child: Column(
+                              children: current.sections.asMap().entries.map(
+                                (entry) {
+                                  final index = entry.key;
+                                  final section = entry.value;
+                                  return Builder(builder: (context) {
+                                    final liveCompleted =
+                                        store.sectionCompletedCount(
+                                      inspectionId: current.id,
+                                      sectionId: section.id,
+                                    );
+                                    final completed =
+                                        liveCompleted > section.completedCount
+                                            ? liveCompleted
+                                            : section.completedCount;
+                                    return Column(
+                                      children: [
+                                        Tappable(
+                                          onTap: () => Navigator.pushNamed(
+                                            context,
+                                            Routes.sectionDetail,
+                                            arguments: {
+                                              'section': section,
+                                              'inspectionName': current.name,
+                                              'inspection': current,
+                                            },
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 14, vertical: 12),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(
+                                                        section.name,
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyMedium
+                                                            ?.copyWith(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600),
+                                                      ),
+                                                      const SizedBox(height: 2),
+                                                      Text(
+                                                        '$completed / ${section.questionCount}',
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .labelSmall
+                                                            ?.copyWith(
+                                                              color: AppColors
+                                                                  .textSecondary(
+                                                                      context),
+                                                            ),
+                                                      ),
+                                                    ],
                                                   ),
+                                                ),
+                                                Icon(
+                                                  completed >=
+                                                          section.questionCount
+                                                      ? Icons.check_circle
+                                                      : Icons.chevron_right,
+                                                  size: 18,
+                                                  color: completed >=
+                                                          section.questionCount
+                                                      ? AppColors.success
+                                                      : AppColors.textTertiary(
+                                                          context),
+                                                ),
+                                              ],
                                             ),
-                                          ],
+                                          ),
                                         ),
-                                      ),
-                                      Icon(
-                                        completed >= section.questionCount
-                                            ? Icons.check_circle
-                                            : Icons.chevron_right,
-                                        color: completed >=
-                                                section.questionCount
-                                            ? AppColors.success
-                                            : AppColors.textSecondary(context),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }),
+                                        if (index <
+                                            current.sections.length - 1)
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 14),
+                                            child: Container(
+                                                height: 1,
+                                                color:
+                                                    AppColors.dividerColor(
+                                                        context)),
+                                          ),
+                                      ],
+                                    );
+                                  });
+                                },
+                              ).toList(),
                             ),
                           ),
                           const SizedBox(height: AppSpacing.x2),

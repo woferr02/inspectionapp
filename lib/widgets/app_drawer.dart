@@ -23,7 +23,7 @@ class AppDrawer extends StatelessWidget {
   });
 
   static const _items = <_NavItem>[
-    _NavItem(icon: Icons.home_outlined, activeIcon: Icons.home, label: 'Dashboard', index: 0),
+    _NavItem(icon: Icons.home_outlined, activeIcon: Icons.home, label: 'Home', index: 0),
     _NavItem(icon: Icons.assignment_outlined, activeIcon: Icons.assignment, label: 'Inspections', index: 1),
     _NavItem(icon: Icons.location_on_outlined, activeIcon: Icons.location_on, label: 'Sites', index: 2),
     _NavItem(icon: Icons.settings_outlined, activeIcon: Icons.settings, label: 'Settings', index: 3),
@@ -141,7 +141,7 @@ class AppDrawer extends StatelessWidget {
                                   vertical: 12,
                                 ),
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius: BorderRadius.circular(8),
                                   color: isActive
                                       ? AppColors.primary.withValues(alpha: 0.08)
                                       : Colors.transparent,
@@ -202,7 +202,7 @@ class AppDrawer extends StatelessWidget {
                                     vertical: 12,
                                   ),
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Row(
                                     children: [
@@ -281,7 +281,7 @@ class AppDrawer extends StatelessWidget {
                             vertical: 12,
                           ),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(8),
                           ),
                           child: Row(
                             children: [
@@ -315,7 +315,7 @@ class AppDrawer extends StatelessWidget {
                             vertical: 12,
                           ),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(8),
                           ),
                           child: Row(
                             children: [
@@ -430,7 +430,7 @@ class _ThemeToggleVisual extends StatelessWidget {
         width: 44,
         height: 24,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(8),
           color: isDark ? AppColors.primary : AppColors.borderColor(context),
         ),
         child: AnimatedAlign(

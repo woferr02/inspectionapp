@@ -23,24 +23,12 @@ class EmptyState extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              width: 64,
-              height: 64,
-              decoration: BoxDecoration(
-                color: AppColors.surfaceColor(context),
-                borderRadius: BorderRadius.circular(32),
-                border: Border.all(
-                  color: AppColors.borderColor(context),
-                  width: 1,
-                ),
-              ),
-              child: Icon(
-                icon,
-                size: 28,
-                color: AppColors.textTertiary(context),
-              ),
+            Icon(
+              icon,
+              size: 40,
+              color: AppColors.textTertiary(context),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
             Text(
               title,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(

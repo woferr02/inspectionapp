@@ -86,7 +86,7 @@ class _NewInspectionSheetState extends State<_NewInspectionSheet> {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.surfaceColor(context),
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
       ),
       padding: EdgeInsets.fromLTRB(24, 16, 24, 16 + bottomInset),
       child: SafeArea(

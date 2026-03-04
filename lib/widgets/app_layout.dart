@@ -10,10 +10,10 @@ class AppSpacing {
 
 /// Design-system border radius tokens.
 class AppRadius {
-  static const double sm = 6;    // small badges, score pills
-  static const double md = 10;   // inputs, dropdowns, cards inner
-  static const double lg = 12;   // surface cards, section blocks
-  static const double xl = 20;   // bottom sheets
+  static const double sm = 4;    // small badges, score pills
+  static const double md = 8;    // inputs, dropdowns, cards inner
+  static const double lg = 8;    // surface cards, section blocks
+  static const double xl = 12;   // bottom sheets
   static const double pill = 999; // buttons, chips, pills
 }
 

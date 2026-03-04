@@ -21,7 +21,7 @@ class SectionBlock extends StatelessWidget {
       margin: margin,
       decoration: BoxDecoration(
         color: AppColors.surfaceColor(context),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color: AppColors.borderColor(context),
           width: 1,

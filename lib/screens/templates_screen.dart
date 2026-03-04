@@ -328,20 +328,12 @@ class _IndustryCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
           color: AppColors.surfaceColor(context),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.borderColor(context)),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: AppColors.dividerColor(context)),
         ),
         child: Row(
           children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.08),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Icon(industry.icon, size: 20, color: AppColors.primary),
-            ),
+            Icon(industry.icon, size: 20, color: AppColors.primary),
             const SizedBox(width: 14),
             Expanded(
               child: Column(
@@ -467,7 +459,7 @@ class _IndustryDetailScreenState extends State<_IndustryDetailScreen>
                               decoration: BoxDecoration(
                                 color:
                                     AppColors.primary.withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(8),
                               ),
                               child: Icon(widget.industry.icon,
                                   size: 22, color: AppColors.primary),
@@ -635,23 +627,15 @@ class _TemplateListTile extends StatelessWidget {
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: AppColors.surfaceColor(context),
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: AppColors.borderColor(context)),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: AppColors.dividerColor(context)),
         ),
         child: Row(
           children: [
-            Container(
-              width: 38,
-              height: 38,
-              decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.08),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Icon(
-                ind?.icon ?? Icons.rule_folder_outlined,
-                size: 18,
-                color: AppColors.primary,
-              ),
+            Icon(
+              ind?.icon ?? Icons.rule_folder_outlined,
+              size: 18,
+              color: AppColors.primary,
             ),
             const SizedBox(width: 14),
             Expanded(
@@ -729,26 +713,18 @@ class _CompactTemplateCard extends StatelessWidget {
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: AppColors.surfaceColor(context),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.borderColor(context)),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: AppColors.dividerColor(context)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                Container(
-                  width: 34,
-                  height: 34,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.08),
-                    borderRadius: BorderRadius.circular(AppRadius.md),
-                  ),
-                  child: Icon(
-                    ind?.icon ?? Icons.rule_folder_outlined,
-                    size: 16,
-                    color: AppColors.primary,
-                  ),
+                Icon(
+                  ind?.icon ?? Icons.rule_folder_outlined,
+                  size: 16,
+                  color: AppColors.primary,
                 ),
                 const Spacer(),
                 if (template.isFavourite)

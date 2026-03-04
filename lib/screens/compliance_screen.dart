@@ -246,7 +246,7 @@ class _RegulationCard extends StatelessWidget {
       isScrollControlled: true,
       backgroundColor: AppColors.surfaceColor(context),
       shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(12))),
       builder: (ctx) {
         return DraggableScrollableSheet(
           initialChildSize: 0.65,

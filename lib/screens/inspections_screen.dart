@@ -583,15 +583,9 @@ class _QuickAction extends StatelessWidget {
   Widget build(BuildContext context) {
     return Tappable(
       onTap: onTap,
-      child: Container(
-        width: 36,
-        height: 36,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.borderColor(context)),
-        ),
-        child: Icon(icon, size: 18, color: color ?? AppColors.textSecondary(context)),
+      child: Padding(
+        padding: const EdgeInsets.all(6),
+        child: Icon(icon, size: 18, color: color ?? AppColors.textTertiary(context)),
       ),
     );
   }
@@ -604,21 +598,12 @@ class _StatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(
-          color: inspection.statusColor.withValues(alpha: 0.4),
-        ),
-      ),
-      child: Text(
-        inspection.statusText,
-        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: inspection.statusColor,
-            ),
-      ),
+    return Text(
+      inspection.statusText,
+      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+            fontWeight: FontWeight.w600,
+            color: inspection.statusColor,
+          ),
     );
   }
 }

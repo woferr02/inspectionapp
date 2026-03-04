@@ -218,7 +218,7 @@ class _SiteDetailScreenState extends State<SiteDetailScreen> {
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
                                   color: AppColors.backgroundColor(context),
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius: BorderRadius.circular(8),
                                   border: Border.all(
                                     color: AppColors.borderColor(context),
                                     width: 1,

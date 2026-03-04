@@ -493,7 +493,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                   duration: const Duration(milliseconds: 150),
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(8),
                     color: isSelected
                         ? AppColors.primary.withValues(alpha: 0.06)
                         : AppColors.surfaceColor(context),
@@ -649,7 +649,7 @@ class _IndustryRow extends StatelessWidget {
         duration: const Duration(milliseconds: 150),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(8),
           color: isSelected
               ? AppColors.primary.withValues(alpha: 0.06)
               : AppColors.surfaceColor(context),

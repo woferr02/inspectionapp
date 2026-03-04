@@ -24,7 +24,7 @@ class PhotoGrid extends StatelessWidget {
       context: context,
       backgroundColor: AppColors.surfaceColor(context),
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
       ),
       builder: (ctx) => SafeArea(
         child: Padding(

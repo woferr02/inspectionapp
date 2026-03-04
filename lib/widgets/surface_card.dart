@@ -15,7 +15,7 @@ class SurfaceCard extends StatelessWidget {
     this.padding = const EdgeInsets.all(16),
     this.margin = EdgeInsets.zero,
     this.onTap,
-    this.borderRadius = const BorderRadius.all(Radius.circular(12)),
+    this.borderRadius = const BorderRadius.all(Radius.circular(8)),
   });
 
   @override
@@ -26,7 +26,7 @@ class SurfaceCard extends StatelessWidget {
         color: AppColors.surfaceColor(context),
         borderRadius: borderRadius,
         border: Border.all(
-          color: AppColors.borderColor(context),
+          color: AppColors.dividerColor(context),
           width: 1,
         ),
       ),

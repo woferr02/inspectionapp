@@ -33,7 +33,7 @@ class CustomBottomNav extends StatelessWidget {
               currentIndex: currentIndex,
               icon: Icons.home_outlined,
               activeIcon: Icons.home,
-              label: 'Dashboard',
+              label: 'Home',
               onTap: () => onTabSelected(0),
             ),
             _BottomNavTab(
@@ -116,23 +116,12 @@ class _BottomNavTabState extends State<_BottomNavTab> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  width: 32,
-                  height: 32,
-                  alignment: Alignment.center,
-                  decoration: isActive
-                      ? BoxDecoration(
-                          color: AppColors.primary.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(AppRadius.md),
-                        )
-                      : null,
-                  child: Icon(
-                    isActive ? widget.activeIcon : widget.icon,
-                    size: 20,
-                    color: iconColor,
-                  ),
+                Icon(
+                  isActive ? widget.activeIcon : widget.icon,
+                  size: 22,
+                  color: iconColor,
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: 4),
                 Text(
                   widget.label,
                   style: TextStyle(

@@ -14,7 +14,7 @@ class SecondaryButton extends StatefulWidget {
     required this.onPressed,
     this.isLoading = false,
     this.width,
-    this.height = 48,
+    this.height = 44,
   });
 
   @override
@@ -39,7 +39,7 @@ class _SecondaryButtonState extends State<SecondaryButton> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
           color: Colors.transparent,
-          borderRadius: BorderRadius.circular(999),
+          borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color: AppColors.borderColor(context),
             width: 1,

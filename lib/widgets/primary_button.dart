@@ -17,7 +17,7 @@ class PrimaryButton extends StatefulWidget {
     this.isLoading = false,
     this.enabled = true,
     this.width,
-    this.height = 48,
+    this.height = 44,
   });
 
   @override
@@ -49,7 +49,7 @@ class _PrimaryButtonState extends State<PrimaryButton> {
           color: widget.isLoading
               ? AppColors.primary.withValues(alpha: 0.7)
               : AppColors.primary,
-          borderRadius: BorderRadius.circular(999),
+          borderRadius: BorderRadius.circular(8),
         ),
         transform: Matrix4.identity()..scale(_isPressed ? 0.98 : 1.0),
         transformAlignment: Alignment.center,

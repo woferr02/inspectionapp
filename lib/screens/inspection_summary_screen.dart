@@ -110,7 +110,7 @@ class _InspectionSummaryScreenState extends State<InspectionSummaryScreen>
                     color: AppColors.surfaceColor(context),
                     border: Border(
                       bottom: BorderSide(
-                          color: AppColors.borderColor(context), width: 1),
+                          color: AppColors.dividerColor(context), width: 1),
                     ),
                   ),
                   child: AppViewport(
@@ -218,7 +218,7 @@ class _OverviewTab extends StatelessWidget {
                               ? AppColors.success
                               : current.statusColor)
                           .withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(8),
                     ),
                     child: Icon(
                       isReported

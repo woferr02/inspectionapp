@@ -27,7 +27,7 @@ class _SchedulesScreenState extends State<SchedulesScreen> {
       isScrollControlled: true,
       backgroundColor: AppColors.surfaceColor(context),
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
       ),
       builder: (ctx) => const _CreateScheduleSheet(),
     );
