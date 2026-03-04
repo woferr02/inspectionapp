@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "126195648075",
+    "project_id": "inspection-expectation",
+    "storage_bucket": "inspection-expectation.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:126195648075:android:140de4370d8352914f2fce",
+        "android_client_info": {
+          "package_name": "com.example.health_safety_inspection"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "126195648075-lf3pq9kr40u0gkfvo7cha3qn42dn1gtr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.health_safety_inspection",
+            "certificate_hash": "a3aca1bc2ad114013b9ffeba2be31e9c549a3d8f"
+          }
+        },
+        {
+          "client_id": "126195648075-11ip0gkf5db7q4tg5oav93cle0ephi61.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAk16ySpkXsIrBx-i29t_-t_lCqsmpO2T0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "126195648075-11ip0gkf5db7q4tg5oav93cle0ephi61.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,51 @@
+═══════════════════════════════════════════════════════════════════
+  SafeCheck Pro — UI Normalization & Architecture Master Plan
+═══════════════════════════════════════════════════════════════════
+
+PHASE 0: DESIGN SYSTEM FOUNDATION
+──────────────────────────────────
+[x] 0.1  Add AppRadius tokens (sm=6, md=10, lg=12, xl=20, pill=999)
+[x] 0.2  Add AppColors.info (indigo #6366F1) for 'submitted' status
+[x] 0.3  Add displayHero (fontSize:40, w700) to text theme extension
+[x] 0.4  Standardize bottom sheet top radius to 20 everywhere
+[x] 0.5  Unify chip/badge widget — create AppChip (pill variant + badge variant)
+
+PHASE 1: FIRESTORE DATA SILO FIX
+─────────────────────────────────
+[x] 1.1  Add orgId field to AuthService + persist to user profile
+[x] 1.2  Add inspectionsRef logic: if user has orgId → read/write from
+          organizations/{orgId}/inspections, else users/{uid}/inspections
+[x] 1.3  Same for corrective_actions, schedules, sites collections
+[x] 1.4  Update OrgService to write orgId to member profiles on invite accept
+[x] 1.5  Update InspectionStore.loadForCurrentUser to use new ref path
+
+PHASE 2: GLOBAL UI FIXES (highest visual impact)
+─────────────────────────────────────────────────
+[x] 2.1  qr_scanner_screen — Replace raw buttons with PrimaryButton/SecondaryButton
+[x] 2.2  compliance_screen — Wrap in AppViewport, replace raw TextField with InputField
+[x] 2.3  corrective_actions_screen — Wrap in AppViewport, use EmptyState widget
+[x] 2.4  schedules_screen — Use EmptyState widget
+[x] 2.5  team_screen — Use EmptyState widget
+[x] 2.6  Replace ALL hardcoded Colors with AppColors across every screen
+[x] 2.7  Unify _StatusBadge (inspections_screen pill vs inspection_row BR6)
+[x] 2.8  Replace all inline TextStyle(fontSize) with textTheme refs — ALL screens + widgets
+[x] 2.9  Standardize ALL BorderRadius to AppRadius tokens across entire codebase
+[x] 2.10 Fix form_dropdown, form_checkbox, filter_sheet widget consistency
+[x] 2.11 Replace AlertDialog raw buttons with proper patterns
+
+PHASE 3: PER-SCREEN POLISH
+───────────────────────────
+[x] 3.1  dashboard_screen — Use textTheme refs, fix fontSize 10 stat labels
+[x] 3.2  inspection_summary_screen — Replace all hardcoded colors, unify buttons
+[x] 3.3  inspection_complete_screen — Fix off-brand warning color
+[x] 3.4  template_builder_screen — Fix BR chips, use EmptyState, replace raw TextField
+[x] 3.5  analytics_screen — Fix hardcoded indigo, standardize icon container sizes
+[x] 3.6  onboarding_screen — Replace fontSize 40 with displayHero, fix border radii
+[x] 3.7  templates_screen — Unify chip radius to pill
+[x] 3.8  section_detail_screen — Unify custom buttons to standard components
+
+PHASE 4: BUILD & VERIFY
+────────────────────────
+[x] 4.1  dart analyze lib/ — zero errors, zero warnings
+[x] 4.2  flutter build apk --release — 79.9MB ✓
+[x] 4.3  Manual review of all changes
