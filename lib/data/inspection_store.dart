@@ -257,9 +257,30 @@ class InspectionStore extends ChangeNotifier {
   /// - N/A questions are excluded from scoring
   /// - If ALL questions are N/A, section scores null (not 100)
   /// - Score = (pass count / (pass + fail count)) * 100
+  /// - yes_no questions: 'yes' = pass, 'no' = fail
+  /// - numeric/text/scale/multi answers are counted as pass (completed)
   static int? calculateSectionScore(Map<String, String> answers) {
-    final passCount = answers.values.where((v) => v == 'pass').length;
-    final failCount = answers.values.where((v) => v == 'fail').length;
+    int passCount = 0;
+    int failCount = 0;
+    for (final v in answers.values) {
+      switch (v) {
+        case 'pass':
+        case 'yes':
+          passCount++;
+          break;
+        case 'fail':
+        case 'no':
+          failCount++;
+          break;
+        case 'na':
+          // Excluded from scoring
+          break;
+        default:
+          // Numeric, text, scale, multi — treat as completed/pass
+          if (v.isNotEmpty) passCount++;
+          break;
+      }
+    }
     final scoredChecks = passCount + failCount;
     // If nothing was actually scored (all N/A), return null
     if (scoredChecks == 0) return null;

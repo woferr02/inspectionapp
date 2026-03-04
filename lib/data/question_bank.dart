@@ -1,8 +1,17 @@
 /// Maps section names to contextual check-item questions.
-/// Each question has an id, title, and a brief description.
+/// Each question has an id, title, description, and an optional type.
+///
+/// Supported question types (defaults to 'pass_fail' when omitted):
+///   pass_fail  — Pass / Fail / N/A radio buttons (default)
+///   yes_no     — Yes / No / N/A radio buttons
+///   numeric    — Number input with optional unit (e.g. °C, %, ppm)
+///   text       — Free text entry
+///   scale      — 1-5 rating scale
+///   multi      — Multiple-choice checkboxes (options in 'options' key, comma-separated)
 class QuestionBank {
   /// Returns a list of questions for the given section name
   /// with the expected [count].
+  /// Each returned map has: id, title, desc, type, and optionally 'unit' or 'options'.
   static List<Map<String, String>> forSection(String sectionName, int count) {
     final key = sectionName.toLowerCase();
 
@@ -29,6 +38,9 @@ class QuestionBank {
           'id': 'q${e.key + 1}',
           'title': e.value['title']!,
           'desc': e.value['desc']!,
+          'type': e.value['type'] ?? 'pass_fail',
+          if (e.value.containsKey('unit')) 'unit': e.value['unit']!,
+          if (e.value.containsKey('options')) 'options': e.value['options']!,
         };
       }).toList();
     }
@@ -41,6 +53,9 @@ class QuestionBank {
           'id': 'q${i + 1}',
           'title': base[i]['title']!,
           'desc': base[i]['desc']!,
+          'type': base[i]['type'] ?? 'pass_fail',
+          if (base[i].containsKey('unit')) 'unit': base[i]['unit']!,
+          if (base[i].containsKey('options')) 'options': base[i]['options']!,
         });
       } else {
         result.add({
@@ -1844,6 +1859,208 @@ class QuestionBank {
       {'title': 'Is signage compliant with NZS and clearly visible?', 'desc': 'Speed limits, hazard warnings, PPE requirements, and directional signs'},
       {'title': 'Are all plant operators holding appropriate competency or licensing?', 'desc': 'NZQA Unit Standards; site-specific familiarisation completed'},
       {'title': 'Are temporary traffic management measures in place for public roads?', 'desc': 'NZTA Code of Practice for Temporary Traffic Management; TTM plan approved'},
+    ],
+
+    // ══════════════════════════════════════════════════════
+    // UK Fire Risk Assessment (RRO 2005)
+    // ══════════════════════════════════════════════════════
+    'fire risk assessment': [
+      {'title': 'Has a responsible person been identified for fire safety?', 'desc': 'RRO 2005 Article 3; name and role documented'},
+      {'title': 'Is the fire risk assessment documented and up to date?', 'desc': 'Reviewed at least annually or after significant changes'},
+      {'title': 'Have all sources of ignition been identified?', 'desc': 'Electrical, smoking, hot works, heating, arson risk'},
+      {'title': 'Have all sources of fuel been identified?', 'desc': 'Paper, wood, textiles, flammable liquids, gases'},
+      {'title': 'Have all sources of oxygen been identified?', 'desc': 'Natural ventilation, air conditioning, oxidising chemicals'},
+      {'title': 'Who is at risk? Have vulnerable persons been identified?', 'desc': 'Disabled persons, lone workers, visitors, contractors, young persons', 'type': 'text'},
+      {'title': 'Are fire detection and warning systems adequate?', 'desc': 'Coverage, sounder levels, visual alarms for hearing impaired'},
+      {'title': 'When was the fire alarm system last tested?', 'desc': 'Weekly call-point test; record in fire log book', 'type': 'text'},
+      {'title': 'Are escape routes adequate and unobstructed?', 'desc': 'Width, travel distance, number of exits per BS 9999'},
+      {'title': 'Is emergency lighting tested monthly?', 'desc': 'Battery-backed lighting on escape routes; monthly flick test, annual 3hr test'},
+      {'title': 'Are fire doors self-closing and in good condition?', 'desc': 'Intumescent strips, smoke seals, no wedging or propping open'},
+      {'title': 'When was the last fire evacuation drill conducted?', 'desc': 'At least annually; record date, evacuation time, and observations', 'type': 'text'},
+      {'title': 'What was the evacuation time (minutes)?', 'desc': 'Benchmark against target for building type', 'type': 'numeric', 'unit': 'min'},
+      {'title': 'Is fire safety training provided to all staff?', 'desc': 'Induction + refresher; fire action procedures and extinguisher use'},
+      {'title': 'Are fire extinguishers serviced annually?', 'desc': 'BS 5306-3; commissioning, annual service, extended service'},
+    ],
+
+    // ══════════════════════════════════════════════════════
+    // UK DSE Workstation Assessment (HSE Regs 1992)
+    // ══════════════════════════════════════════════════════
+    'dse workstation': [
+      {'title': 'Is the screen at a comfortable viewing distance?', 'desc': 'Typically arm\'s length (50-70cm); top of screen at or just below eye level'},
+      {'title': 'Is the screen free from glare and reflections?', 'desc': 'Position relative to windows, blinds available, anti-glare filter if needed'},
+      {'title': 'Rate the screen image quality (text clarity, brightness)', 'desc': '1=Poor/flickering, 5=Sharp/comfortable', 'type': 'scale'},
+      {'title': 'Is the keyboard separate and tiltable?', 'desc': 'Space in front for wrist rest; keys legible and responsive'},
+      {'title': 'Is the mouse positioned close to the keyboard?', 'desc': 'Arm not overreaching; appropriate mouse type for user (standard/ergonomic)'},
+      {'title': 'Is the chair adjustable (height, back, tilt)?', 'desc': 'Feet flat on floor or footrest; lumbar support; armrests not impeding'},
+      {'title': 'Rate the chair comfort on a typical working day', 'desc': '1=Uncomfortable/causes pain, 5=Fully comfortable', 'type': 'scale'},
+      {'title': 'Is the desk surface large enough for all equipment?', 'desc': 'Space fpr documents, phone, personal items; surface is non-reflective'},
+      {'title': 'Is the lighting adequate and adjustable?', 'desc': 'Task lighting available; no direct glare on screen; 300-500 lux for office work'},
+      {'title': 'Measured illuminance at desk (lux)', 'desc': 'Use light meter; target 300-500 lux for general office', 'type': 'numeric', 'unit': 'lux'},
+      {'title': 'Is there adequate space under the desk for leg movement?', 'desc': 'Minimum 60cm knee clearance; cables routed away'},
+      {'title': 'Does the user take regular breaks from DSE work?', 'desc': 'HSE guidance: short frequent breaks; change activity every 30-60 min'},
+      {'title': 'Has the user been offered an eye test?', 'desc': 'DSE Regs 1992 Reg 5; employer must fund initial + periodic eye tests'},
+      {'title': 'Does the user report any discomfort or pain?', 'desc': 'Record any MSK symptoms: neck, shoulders, wrists, back', 'type': 'text'},
+    ],
+
+    // ══════════════════════════════════════════════════════
+    // UK Gas Safety Check (GSIUR 1998)
+    // ══════════════════════════════════════════════════════
+    'gas safety': [
+      {'title': 'Is the gas work being carried out by a Gas Safe registered engineer?', 'desc': 'GSIUR Reg 3; check Gas Safe ID card and registration number'},
+      {'title': 'Gas Safe registration number', 'desc': 'Record the engineer\'s Gas Safe number for verification', 'type': 'text'},
+      {'title': 'Is the gas meter and emergency control valve accessible?', 'desc': 'Unobstructed access; location known to all responsible persons'},
+      {'title': 'Are all gas appliances in safe working order?', 'desc': 'Visual check: no damage, scorch marks, or unusual odour'},
+      {'title': 'Is the gas tightness test passing?', 'desc': 'Pressure drop test on installation; no leaks detected'},
+      {'title': 'Gas pressure reading at meter (mbar)', 'desc': 'Normal operating pressure 20-21 mbar for NG', 'type': 'numeric', 'unit': 'mbar'},
+      {'title': 'Is the flue termination position correct and unobstructed?', 'desc': 'BS 5440-1; correct distance from openings, boundaries, and obstructions'},
+      {'title': 'Is ventilation adequate for each appliance?', 'desc': 'Air supply per BS 5440-2; permanent vents not blocked'},
+      {'title': 'CO reading in the room (ppm)', 'desc': 'Should be 0 ppm ambient; investigate any reading above 0', 'type': 'numeric', 'unit': 'ppm'},
+      {'title': 'Is a carbon monoxide alarm fitted and in date?', 'desc': 'BS EN 50291; tested and within expiry; recommended in all rooms with gas appliances'},
+      {'title': 'Is a valid landlord gas safety certificate in place?', 'desc': 'GSIUR Reg 36; annual check required for rented properties; copy to tenants within 28 days'},
+    ],
+
+    // ══════════════════════════════════════════════════════
+    // UK Electricity at Work (EWR 1989)
+    // ══════════════════════════════════════════════════════
+    'electricity at work': [
+      {'title': 'Is the fixed electrical installation condition report (EICR) current?', 'desc': 'BS 7671; typically every 5 years or change of occupancy'},
+      {'title': 'Are portable appliances tested (PAT) and tagged?', 'desc': 'IET Code of Practice; frequency based on equipment type and environment'},
+      {'title': 'Are isolation procedures documented and followed?', 'desc': 'EWR Reg 12; safe system of work for electrical isolation; lock-off provisions'},
+      {'title': 'Are all switchboards and distribution boards accessible?', 'desc': 'No storage in front; 1m clear zone; circuit schedule available'},
+      {'title': 'Are RCDs fitted and tested?', 'desc': 'EWR Reg 12; 30mA RCD for socket outlets; quarterly push-button test'},
+      {'title': 'RCD trip time (ms)', 'desc': 'Should trip within 300ms at rated current (typically <40ms)', 'type': 'numeric', 'unit': 'ms'},
+      {'title': 'Are earth bonding connections intact?', 'desc': 'Maintain earthing of metallic services: water, gas, oil pipes'},
+      {'title': 'Is the electrical installation free from visible defects?', 'desc': 'No damaged cables, overheating signs, loose connections, or missing covers'},
+      {'title': 'Are temporary electrical supplies properly installed?', 'desc': 'Construction supplies per BS 7909; RCBO protection; cable routing'},
+      {'title': 'Is only a competent person authorised to work on electrical systems?', 'desc': 'EWR Reg 16; trained, qualified, and authorised persons register'},
+    ],
+
+    // ══════════════════════════════════════════════════════
+    // UK Noise at Work (CNW Regs 2005)
+    // ══════════════════════════════════════════════════════
+    'noise at work': [
+      {'title': 'Has a noise exposure assessment been carried out?', 'desc': 'CNW Regs 2005 Reg 5; competent person noise survey'},
+      {'title': 'Average noise level in this area (dB)', 'desc': 'Lower action value 80 dB(A), upper 85 dB(A), limit 87 dB(A)', 'type': 'numeric', 'unit': 'dB(A)'},
+      {'title': 'Peak noise level measured (dB(C))', 'desc': 'Lower action: 135 dB(C), upper: 137 dB(C)', 'type': 'numeric', 'unit': 'dB(C)'},
+      {'title': 'Are hearing protection zones designated and signed?', 'desc': 'Mandatory HPE signage at 85 dB(A) areas; blue mandatory PPE signs'},
+      {'title': 'Is suitable hearing protection provided and worn?', 'desc': 'EN 352-compliant; SNR appropriate for measured levels'},
+      {'title': 'Has noise reduction at source been considered?', 'desc': 'Engineering controls: damping, enclosure, silencers, isolation mounts'},
+      {'title': 'Are employees informed of the risks of noise exposure?', 'desc': 'CNW Reg 10; information and training on noise risks and controls'},
+      {'title': 'Is audiometric testing provided for exposed workers?', 'desc': 'Health surveillance per Reg 9; baseline and periodic hearing tests'},
+      {'title': 'Are maintenance records up to date for noise-producing equipment?', 'desc': 'Bearing wear, vibration dampers, exhaust silencers — maintenance reduces noise'},
+    ],
+
+    // ══════════════════════════════════════════════════════
+    // UK Vibration at Work (CVW Regs 2005)
+    // ══════════════════════════════════════════════════════
+    'vibration at work': [
+      {'title': 'Has a hand-arm vibration (HAV) exposure assessment been carried out?', 'desc': 'CVW Regs 2005 Reg 5; identify tools and daily exposure duration'},
+      {'title': 'HAV daily exposure value (m/s²)', 'desc': 'EAV: 2.5 m/s², ELV: 5 m/s² (A(8) 8-hour reference)', 'type': 'numeric', 'unit': 'm/s²'},
+      {'title': 'Has a whole-body vibration (WBV) exposure assessment been carried out?', 'desc': 'CVW Regs; vehicle operators, plant drivers, forklift operators'},
+      {'title': 'WBV daily exposure value (m/s²)', 'desc': 'EAV: 0.5 m/s², ELV: 1.15 m/s² (A(8) 8-hour reference)', 'type': 'numeric', 'unit': 'm/s²'},
+      {'title': 'Is a tool inventory maintained with vibration magnitudes?', 'desc': 'Manufacturer data or measured values; used to calculate A(8)'},
+      {'title': 'Are low-vibration alternatives used where available?', 'desc': 'Anti-vibration tools, damped handles, remote operation'},
+      {'title': 'Is health surveillance provided for exposed workers?', 'desc': 'Reg 7: tier 1-5 system; questionnaire + clinical assessment'},
+      {'title': 'Are task rotation and exposure time limits in place?', 'desc': 'Reduce individual exposure by sharing tasks between workers'},
+      {'title': 'Do workers report any symptoms (tingling, numbness, white finger)?', 'desc': 'Record symptoms and refer to occupational health', 'type': 'text'},
+    ],
+
+    // ══════════════════════════════════════════════════════
+    // UK Manual Handling (MHO Regs 1992)
+    // ══════════════════════════════════════════════════════
+    'manual handling assessment': [
+      {'title': 'Can the manual handling task be avoided or mechanised?', 'desc': 'MHO Regs 1992 Reg 4(1)(a); eliminate before reduce'},
+      {'title': 'Weight of the heaviest load handled (kg)', 'desc': 'HSE guideline: <25kg for men, <16kg for women (ideal conditions)', 'type': 'numeric', 'unit': 'kg'},
+      {'title': 'Does the task involve twisting, stooping, or reaching?', 'desc': 'TILE: Task assessment — posture, repetition, and duration'},
+      {'title': 'Are individual capabilities considered?', 'desc': 'TILE: Individual — fitness, training, pregnancy, pre-existing conditions'},
+      {'title': 'Is the load awkward, unstable, or difficult to grip?', 'desc': 'TILE: Load — weight, shape, stability, and grip points'},
+      {'title': 'Is the working environment suitable?', 'desc': 'TILE: Environment — space, flooring, temperature, lighting'},
+      {'title': 'Rate the overall manual handling risk for this task', 'desc': '1=Very low, 5=Very high; based on TILE factors', 'type': 'scale'},
+      {'title': 'Are mechanical aids (trolleys, hoists, conveyors) available?', 'desc': 'Risk reduction; aids in good working order and accessible'},
+      {'title': 'Have staff received manual handling training?', 'desc': 'Appropriate technique training; refresher schedule documented'},
+      {'title': 'Are handling injuries reported and investigated?', 'desc': 'RIDDOR criteria; record near misses and MSK complaints'},
+    ],
+
+    // ══════════════════════════════════════════════════════
+    // UK Food Hygiene (FH Regs 2006 / EC 852/2004)
+    // ══════════════════════════════════════════════════════
+    'food hygiene': [
+      {'title': 'Is a documented HACCP-based system in place?', 'desc': 'EC 852/2004 Article 5; hazard analysis and critical control points'},
+      {'title': 'Fridge temperature (°C)', 'desc': 'Must be at or below 5°C; check with calibrated probe', 'type': 'numeric', 'unit': '°C'},
+      {'title': 'Freezer temperature (°C)', 'desc': 'Must be at or below -18°C', 'type': 'numeric', 'unit': '°C'},
+      {'title': 'Hot holding food temperature (°C)', 'desc': 'Must be at or above 63°C; check core temperature', 'type': 'numeric', 'unit': '°C'},
+      {'title': 'Is food stored correctly to prevent cross-contamination?', 'desc': 'Raw below cooked; separate chopping boards; colour-coded equipment'},
+      {'title': 'Are food labels showing use-by dates checked during delivery?', 'desc': 'Reject food past use-by; record delivery temperatures'},
+      {'title': 'Delivery temperature of chilled goods (°C)', 'desc': 'Must be at or below 8°C on arrival; reject if above', 'type': 'numeric', 'unit': '°C'},
+      {'title': 'Are hand-washing facilities adequate and accessible?', 'desc': 'Hot and cold water, soap, paper towels; no use of food sinks'},
+      {'title': 'Is the cleaning schedule up to date and followed?', 'desc': 'Documented schedule; cleaning products approved for food areas'},
+      {'title': 'Is pest control in place and monitored?', 'desc': 'Professional contractor; bait stations checked; no evidence of pests'},
+      {'title': 'Are allergen controls documented and communicated?', 'desc': 'The 14 allergens; menu labelling; staff awareness; separated prep'},
+      {'title': 'Do all food handlers hold Level 2 Food Hygiene certification?', 'desc': 'CIEH or equivalent; refreshed every 3 years'},
+      {'title': 'Rate overall kitchen cleanliness', 'desc': '1=Poor (major concerns), 5=Excellent (spotless and well maintained)', 'type': 'scale'},
+    ],
+
+    // ══════════════════════════════════════════════════════
+    // UK RIDDOR Incident Investigation (RIDDOR 2013)
+    // ══════════════════════════════════════════════════════
+    'riddor incident': [
+      {'title': 'What type of incident occurred?', 'desc': 'Death, specified injury, over-7-day, dangerous occurrence, disease', 'type': 'multi', 'options': 'Death,Specified injury,Over-7-day incapacitation,Dangerous occurrence,Occupational disease,Near miss'},
+      {'title': 'Date and time of the incident', 'desc': 'Record exact date/time; preserve CCTV if available', 'type': 'text'},
+      {'title': 'Location of the incident', 'desc': 'Specific area, floor, room, and any relevant conditions', 'type': 'text'},
+      {'title': 'Was the incident reported to the HSE within the required timeframe?', 'desc': 'RIDDOR 2013: fatal/specified = immediate, over-7-day = within 15 days'},
+      {'title': 'HSE reference number (if reported)', 'desc': 'F2508 online submission; record reference for file', 'type': 'text'},
+      {'title': 'Has the scene been preserved for investigation?', 'desc': 'Cordon off area; do not disturb evidence; photograph/video'},
+      {'title': 'Were witness statements collected?', 'desc': 'Independent accounts from all witnesses; date, time, and signature'},
+      {'title': 'What were the immediate causes?', 'desc': 'Direct factors that led to the incident', 'type': 'text'},
+      {'title': 'What were the underlying/root causes?', 'desc': 'Systemic failures: training gaps, procedure gaps, supervision, equipment', 'type': 'text'},
+      {'title': 'Have corrective actions been identified and assigned?', 'desc': 'Action plan with owners, target dates, and verification method'},
+      {'title': 'Has the risk assessment been reviewed in light of the incident?', 'desc': 'Update existing RA or create new one; communicate changes'},
+    ],
+
+    // ══════════════════════════════════════════════════════
+    // UK COSHH Assessment (COSHH Regs 2002)
+    // ══════════════════════════════════════════════════════
+    'coshh assessment': [
+      {'title': 'Is a COSHH assessment documented for each hazardous substance?', 'desc': 'COSHH Reg 6; identify substances, classify hazards, assess exposure'},
+      {'title': 'Are Safety Data Sheets (SDS) available for all chemicals?', 'desc': 'CLP Regulation; 16-section SDS from supplier; accessible to users'},
+      {'title': 'What hazardous substances are present?', 'desc': 'List all substances used, produced, or stored in this area', 'type': 'text'},
+      {'title': 'Are chemicals stored correctly and segregated?', 'desc': 'Incompatible substances separated; bunding for liquids; ventilated store'},
+      {'title': 'Are exposure controls adequate (LEV, enclosure, PPE)?', 'desc': 'Hierarchy of control: eliminate > substitute > engineering > PPE'},
+      {'title': 'Is RPE face-fit tested and recorded?', 'desc': 'COSHH Reg 7; qualitative or quantitative fit test; annual retest'},
+      {'title': 'Is health surveillance provided for exposed workers?', 'desc': 'COSHH Reg 11; lung function, skin assessment, or biological monitoring'},
+      {'title': 'Are spill kits available and appropriate?', 'desc': 'Matched to substance type; staff trained in use; kits inspected regularly'},
+      {'title': 'Is the COSHH assessment reviewed at least annually?', 'desc': 'COSHH Reg 6(3); review after incident, change of substance, or new evidence'},
+    ],
+
+    // ══════════════════════════════════════════════════════
+    // UK Construction Phase Plan (CDM 2015 Reg 12)
+    // ══════════════════════════════════════════════════════
+    'construction phase plan': [
+      {'title': 'Is the construction phase plan prepared before work begins?', 'desc': 'CDM 2015 Reg 12(1); principal contractor duty'},
+      {'title': 'Does the plan describe the project and management arrangements?', 'desc': 'Reg 12(2); project description, key personnel, and organogram'},
+      {'title': 'Are site rules clearly documented?', 'desc': 'PPE requirements, drug/alcohol policy, speed limits, permit procedures'},
+      {'title': 'Are high-risk activities identified with specific controls?', 'desc': 'Working at height, confined space, hot works, demolition, excavation'},
+      {'title': 'Are welfare provisions detailed per CDM Schedule 2?', 'desc': 'Toilets, washing, drinking water, rest areas, changing rooms'},
+      {'title': 'Is the site induction procedure described?', 'desc': 'Content, duration, and who delivers; records kept'},
+      {'title': 'Are emergency procedures documented?', 'desc': 'Fire, first aid, evacuation, severe weather, structural collapse'},
+      {'title': 'Is the plan reviewed and updated as work progresses?', 'desc': 'Living document; amendments recorded; communicated to all parties'},
+      {'title': 'Rate the comprehensiveness of the construction phase plan', 'desc': '1=Minimal/incomplete, 5=Comprehensive and well-structured', 'type': 'scale'},
+    ],
+
+    // ══════════════════════════════════════════════════════
+    // UK Workplace Transport (HSG136)
+    // ══════════════════════════════════════════════════════
+    'workplace transport': [
+      {'title': 'Are traffic routes suitable for the vehicles using them?', 'desc': 'HSG136; width, surface condition, load-bearing capacity, gradients'},
+      {'title': 'Are pedestrian and vehicle routes separated?', 'desc': 'Physical barriers, painted walkways, and controlled crossing points'},
+      {'title': 'Are speed limits set, signed, and enforced?', 'desc': 'Typically 5-15 mph; speed humps or rumble strips where appropriate'},
+      {'title': 'Is adequate lighting provided on all traffic routes?', 'desc': 'External lighting; transition zones; no sudden changes in light level'},
+      {'title': 'Lighting level on traffic routes (lux)', 'desc': 'Minimum 20 lux for traffic areas', 'type': 'numeric', 'unit': 'lux'},
+      {'title': 'Are safe reversing procedures in place?', 'desc': 'Banksmen, CCTV, proximity alarms, one-way systems where possible'},
+      {'title': 'Are loading/unloading areas safe and controlled?', 'desc': 'Level surfaces, wheel chocks, edge protection, safe loading procedures'},
+      {'title': 'Are all drivers trained and authorised?', 'desc': 'Valid licence, site-specific induction, authorisation register'},
+      {'title': 'Are vehicles subject to pre-use daily checks?', 'desc': 'Documented walkaround check; defect reporting system'},
+      {'title': 'Which types of vehicles operate on site?', 'desc': 'List all vehicle types', 'type': 'multi', 'options': 'Forklift,HGV,Van,Car,Telehandler,Dumper,Crane,Other'},
     ],
   };
 }

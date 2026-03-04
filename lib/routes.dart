@@ -18,6 +18,7 @@ import 'screens/template_builder_screen.dart';
 import 'screens/qr_scanner_screen.dart';
 import 'screens/compliance_screen.dart';
 import 'screens/paywall_screen.dart';
+import 'screens/join_org_screen.dart';
 import 'widgets/app_shell.dart';
 import 'models/inspection.dart';
 import 'models/site.dart';
@@ -47,6 +48,7 @@ class Routes {
   static const String qrScanner = '/qr-scanner';
   static const String compliance = '/compliance';
   static const String paywall = '/paywall';
+  static const String joinOrg = '/join-org';
 
   static Route<dynamic> _fallback() =>
       MaterialPageRoute(builder: (_) => const HomeScreen());
@@ -131,6 +133,11 @@ class Routes {
         final feature = routeSettings.arguments as Feature?;
         return MaterialPageRoute(
           builder: (_) => PaywallScreen(triggerFeature: feature),
+        );
+      case joinOrg:
+        final invite = routeSettings.arguments as Map<String, String>?;
+        return MaterialPageRoute(
+          builder: (_) => JoinOrgScreen(pendingInvite: invite),
         );
       default:
         return _fallback();

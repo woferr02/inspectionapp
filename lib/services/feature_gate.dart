@@ -58,8 +58,8 @@ class FeatureGate {
   /// Template builder (Business only).
   static bool get canTemplateBuilder => _rc.isBusiness;
 
-  /// Web dashboard access (Business only).
-  static bool get canDashboard => _rc.isBusiness;
+  /// Web dashboard access (Pro+ — matches dashboard shell gate).
+  static bool get canDashboard => _rc.isPro;
 
   /// Scheduling (Pro+).
   static bool get canSchedules => _rc.isPro;

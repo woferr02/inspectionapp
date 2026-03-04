@@ -37,6 +37,8 @@ class _SectionDetailScreenState extends State<SectionDetailScreen> {
   final Map<String, String> _answers = {};
   final Map<String, String> _notes = {};
   final Map<String, TextEditingController> _noteControllers = {};
+  final Map<String, TextEditingController> _numericControllers = {};
+  final Map<String, TextEditingController> _textControllers = {};
   final Map<String, List<String>> _photoFiles = {};
   final Set<String> _expandedIds = {};
   final Map<String, GlobalKey> _questionKeys = {};
@@ -102,6 +104,12 @@ class _SectionDetailScreenState extends State<SectionDetailScreen> {
     for (final controller in _noteControllers.values) {
       controller.dispose();
     }
+    for (final controller in _numericControllers.values) {
+      controller.dispose();
+    }
+    for (final controller in _textControllers.values) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
@@ -164,6 +172,263 @@ class _SectionDetailScreenState extends State<SectionDetailScreen> {
         }
         return;
       }
+    }
+  }
+
+  void _setAnswer(String questionId, String value) {
+    HapticFeedback.selectionClick();
+    setState(() {
+      _answers[questionId] = value;
+      final inspection = widget.inspection;
+      if (inspection != null) {
+        InspectionStore.instance.setSectionAnswer(
+          inspectionId: inspection.id,
+          sectionId: widget.section.id,
+          questionId: questionId,
+          answer: value,
+        );
+      }
+    });
+  }
+
+  /// Builds the appropriate input widget based on question type.
+  Widget _buildQuestionInput(
+    BuildContext context,
+    Map<String, String> question,
+    String questionId,
+    String? currentAnswer,
+  ) {
+    final type = question['type'] ?? 'pass_fail';
+
+    switch (type) {
+      case 'yes_no':
+        return FormRadioGroup<String>(
+          label: 'Response',
+          value: currentAnswer,
+          items: const ['yes', 'no', 'na'],
+          itemLabel: (v) {
+            switch (v) {
+              case 'yes': return 'Yes';
+              case 'no': return 'No';
+              case 'na': return 'N/A';
+              default: return v;
+            }
+          },
+          onChanged: (value) => _setAnswer(questionId, value),
+        );
+
+      case 'numeric':
+        final unit = question['unit'] ?? '';
+        final controller = _numericControllers.putIfAbsent(
+          questionId,
+          () => TextEditingController(text: currentAnswer ?? ''),
+        );
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Measured value${unit.isNotEmpty ? ' ($unit)' : ''}',
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                color: AppColors.textSecondary(context),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    height: 48,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: AppColors.borderColor(context)),
+                      color: AppColors.backgroundColor(context),
+                    ),
+                    child: TextField(
+                      controller: controller,
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                      decoration: InputDecoration(
+                        hintText: 'Enter value',
+                        hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.textTertiary(context),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 14),
+                        border: InputBorder.none,
+                        suffixText: unit,
+                        suffixStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: AppColors.textSecondary(context),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      onChanged: (val) {
+                        if (val.isNotEmpty) {
+                          _setAnswer(questionId, val);
+                        }
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+
+      case 'text':
+        final controller = _textControllers.putIfAbsent(
+          questionId,
+          () => TextEditingController(text: currentAnswer ?? ''),
+        );
+        return InputField(
+          label: 'Response',
+          hintText: 'Enter your observation or finding',
+          controller: controller,
+          maxLines: 4,
+          minLines: 2,
+          onChanged: (val) {
+            if (val.isNotEmpty) {
+              _setAnswer(questionId, val);
+            }
+          },
+        );
+
+      case 'scale':
+        final selectedValue = int.tryParse(currentAnswer ?? '');
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Rating (1 = Poor, 5 = Excellent)',
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                color: AppColors.textSecondary(context),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: List.generate(5, (i) {
+                final val = i + 1;
+                final isSelected = selectedValue == val;
+                return Expanded(
+                  child: GestureDetector(
+                    onTap: () => _setAnswer(questionId, val.toString()),
+                    child: Container(
+                      margin: EdgeInsets.only(right: i < 4 ? 8 : 0),
+                      height: 48,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: isSelected
+                              ? AppColors.primary
+                              : AppColors.borderColor(context),
+                          width: isSelected ? 2 : 1,
+                        ),
+                        color: isSelected
+                            ? AppColors.primary.withValues(alpha: 0.08)
+                            : AppColors.backgroundColor(context),
+                      ),
+                      child: Center(
+                        child: Text(
+                          '$val',
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: isSelected
+                                ? AppColors.primary
+                                : AppColors.textSecondary(context),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }),
+            ),
+          ],
+        );
+
+      case 'multi':
+        final options = (question['options'] ?? '').split(',').map((o) => o.trim()).where((o) => o.isNotEmpty).toList();
+        final selected = (currentAnswer ?? '').split(',').map((o) => o.trim()).where((o) => o.isNotEmpty).toSet();
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Select all that apply',
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                color: AppColors.textSecondary(context),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 8),
+            ...options.map((option) {
+              final isChecked = selected.contains(option);
+              return GestureDetector(
+                onTap: () {
+                  final updated = Set<String>.from(selected);
+                  if (isChecked) {
+                    updated.remove(option);
+                  } else {
+                    updated.add(option);
+                  }
+                  _setAnswer(questionId, updated.join(', '));
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 6),
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: isChecked ? AppColors.primary : AppColors.borderColor(context),
+                    ),
+                    color: isChecked
+                        ? AppColors.primary.withValues(alpha: 0.06)
+                        : AppColors.backgroundColor(context),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        isChecked ? Icons.check_box : Icons.check_box_outline_blank,
+                        size: 20,
+                        color: isChecked ? AppColors.primary : AppColors.textTertiary(context),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          option,
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: isChecked ? FontWeight.w600 : FontWeight.w400,
+                            color: isChecked
+                                ? AppColors.primary
+                                : AppColors.textPrimary(context),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }),
+          ],
+        );
+
+      case 'pass_fail':
+      default:
+        return FormRadioGroup<String>(
+          label: 'Response',
+          value: currentAnswer,
+          items: const ['pass', 'fail', 'na'],
+          itemLabel: (v) {
+            switch (v) {
+              case 'pass': return 'Pass';
+              case 'fail': return 'Fail';
+              case 'na': return 'N/A';
+              default: return v;
+            }
+          },
+          onChanged: (value) => _setAnswer(questionId, value),
+        );
     }
   }
 
@@ -233,15 +498,19 @@ class _SectionDetailScreenState extends State<SectionDetailScreen> {
                                 setState(() {
                                   for (final q in questions) {
                                     final qId = q['id']!;
-                                    if (!_answers.containsKey(qId)) {
-                                      _answers[qId] = 'pass';
+                                    final qType = q['type'] ?? 'pass_fail';
+                                    // Only auto-fill pass/fail and yes/no types
+                                    if (!_answers.containsKey(qId) &&
+                                        (qType == 'pass_fail' || qType == 'yes_no')) {
+                                      final answer = qType == 'yes_no' ? 'yes' : 'pass';
+                                      _answers[qId] = answer;
                                       final inspection = widget.inspection;
                                       if (inspection != null) {
                                         InspectionStore.instance.setSectionAnswer(
                                           inspectionId: inspection.id,
                                           sectionId: widget.section.id,
                                           questionId: qId,
-                                          answer: 'pass',
+                                          answer: answer,
                                         );
                                       }
                                     }
@@ -283,7 +552,7 @@ class _SectionDetailScreenState extends State<SectionDetailScreen> {
                         final id = question['id']!;
                         final answer = _answers[id];
                         final expanded = _expandedIds.contains(id);
-                        final isFail = answer == 'fail';
+                        final isFail = answer == 'fail' || answer == 'no';
                         final hasAnswer = answer != null;
                         _questionKeys.putIfAbsent(id, () => GlobalKey());
 
@@ -356,39 +625,7 @@ class _SectionDetailScreenState extends State<SectionDetailScreen> {
                                 ),
                                 if (expanded) ...[
                                   const SizedBox(height: AppSpacing.x2),
-                                  FormRadioGroup<String>(
-                                    label: 'Response',
-                                    value: answer,
-                                    items: const ['pass', 'fail', 'na'],
-                                    itemLabel: (v) {
-                                      switch (v) {
-                                        case 'pass':
-                                          return 'Pass';
-                                        case 'fail':
-                                          return 'Fail';
-                                        case 'na':
-                                          return 'N/A';
-                                        default:
-                                          return v;
-                                      }
-                                    },
-                                    onChanged: (value) {
-                                      HapticFeedback.selectionClick();
-                                      setState(() {
-                                        _answers[id] = value;
-                                        final inspection = widget.inspection;
-                                        if (inspection != null) {
-                                          InspectionStore.instance
-                                              .setSectionAnswer(
-                                            inspectionId: inspection.id,
-                                            sectionId: widget.section.id,
-                                            questionId: id,
-                                            answer: value,
-                                          );
-                                        }
-                                      });
-                                    },
-                                  ),
+                                  _buildQuestionInput(context, question, id, answer),
                                   if (_showValidation && answer == null)
                                     Padding(
                                       padding: const EdgeInsets.only(top: 8),

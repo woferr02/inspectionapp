@@ -8,7 +8,6 @@ import 'package:health_safety_inspection/widgets/app_toast.dart';
 import 'package:health_safety_inspection/widgets/page_header.dart';
 import 'package:health_safety_inspection/widgets/primary_button.dart';
 import 'package:health_safety_inspection/widgets/surface_card.dart';
-import 'package:health_safety_inspection/widgets/tappable.dart';
 
 class InspectionDetailScreen extends StatelessWidget {
   final Inspection inspection;

@@ -172,8 +172,56 @@ class OrgService extends ChangeNotifier {
     }
   }
 
+  /// Check all orgs for a pending invite matching the current user's email.
+  /// Returns a map with {orgId, orgName, pendingMemberId, role} or null.
+  Future<Map<String, String>?> checkPendingInvites() async {
+    final auth = AuthService.instance;
+    if (!auth.isAvailable || auth.currentUser == null) return null;
+    final email = auth.email.toLowerCase().trim();
+    if (email.isEmpty) return null;
+
+    try {
+      // Query all orgs for pending members matching this email.
+      // Firestore doesn't support cross-collection queries, so we use a
+      // collectionGroup query on the 'members' subcollection.
+      final snap = await FirebaseFirestore.instance
+          .collectionGroup('members')
+          .where('email', isEqualTo: email)
+          .where('userId', isGreaterThanOrEqualTo: 'pending-')
+          .where('userId', isLessThan: 'pending.')
+          .get();
+
+      if (snap.docs.isEmpty) return null;
+
+      final pendingDoc = snap.docs.first;
+      final data = pendingDoc.data();
+      final pendingMemberId = data['userId'] as String? ?? pendingDoc.id;
+      final role = data['role'] as String? ?? 'inspector';
+
+      // Walk up the path to get the org ID: members/{id} → organizations/{orgId}
+      final orgRef = pendingDoc.reference.parent.parent;
+      if (orgRef == null) return null;
+      final orgId = orgRef.id;
+
+      // Fetch org name
+      final orgDoc = await orgRef.get();
+      final orgName = orgDoc.data()?['name'] as String? ?? 'Unknown';
+
+      return {
+        'orgId': orgId,
+        'orgName': orgName,
+        'pendingMemberId': pendingMemberId,
+        'role': role,
+      };
+    } catch (e) {
+      debugPrint('[OrgService] checkPendingInvites failed: $e');
+      return null;
+    }
+  }
+
   /// Accept an org invite: replace the pending member doc with the real user,
   /// and write `orgId` to the user's profile so data resolves org-scoped.
+  /// Preserves the role assigned by the admin who created the invite.
   Future<bool> acceptInvite({
     required String orgId,
     required String pendingMemberId,
@@ -188,15 +236,23 @@ class OrgService extends ChangeNotifier {
           .doc(orgId)
           .collection('members');
 
+      // Read the pending doc to preserve the invited role
+      final pendingDoc = await orgMembersRef.doc(pendingMemberId).get();
+      final invitedRole = pendingDoc.data()?['role'] as String? ?? 'inspector';
+      final role = OrgRole.values.firstWhere(
+        (e) => e.name == invitedRole,
+        orElse: () => OrgRole.inspector,
+      );
+
       // Remove the pending placeholder
       await orgMembersRef.doc(pendingMemberId).delete();
 
-      // Add real user member doc
+      // Add real user member doc with the originally invited role
       final member = OrgMember(
         userId: uid,
         email: auth.email,
         displayName: auth.displayName,
-        role: OrgRole.inspector,
+        role: role,
       );
       await orgMembersRef.doc(uid).set(member.toJson());
 
@@ -206,9 +262,93 @@ class OrgService extends ChangeNotifier {
           .doc(uid)
           .set({'orgId': orgId}, SetOptions(merge: true));
 
+      AuditService.instance.log(
+        action: AuditAction.memberInvited,
+        targetId: uid,
+        description: 'Accepted invite to org $orgId as ${role.name}',
+      );
+
       await loadForCurrentUser();
       return true;
     } catch (_) {
+      return false;
+    }
+  }
+
+  /// Join an org by its code (which is the org's Firestore doc ID).
+  /// Checks if the org exists and if there's a pending invite for this email.
+  /// If no pending invite, adds the user directly as inspector (open join).
+  Future<bool> joinByCode(String orgCode) async {
+    final auth = AuthService.instance;
+    if (!auth.isAvailable || auth.currentUser == null) return false;
+    final uid = auth.currentUser!.uid;
+    final email = auth.email.toLowerCase().trim();
+
+    try {
+      // Verify org exists
+      final orgDoc = await FirebaseFirestore.instance
+          .collection('organizations')
+          .doc(orgCode)
+          .get();
+      if (!orgDoc.exists) return false;
+
+      final membersRef = FirebaseFirestore.instance
+          .collection('organizations')
+          .doc(orgCode)
+          .collection('members');
+
+      // Check for a pending invite matching this email
+      final pendingSnap = await membersRef
+          .where('email', isEqualTo: email)
+          .get();
+
+      String? pendingId;
+      OrgRole invitedRole = OrgRole.inspector;
+      for (final doc in pendingSnap.docs) {
+        final userId = doc.data()['userId'] as String? ?? '';
+        if (userId.startsWith('pending-')) {
+          pendingId = userId;
+          final roleStr = doc.data()['role'] as String? ?? 'inspector';
+          invitedRole = OrgRole.values.firstWhere(
+            (e) => e.name == roleStr,
+            orElse: () => OrgRole.inspector,
+          );
+          break;
+        }
+      }
+
+      if (pendingId != null) {
+        // Accept the existing invite (preserving role)
+        return await acceptInvite(
+          orgId: orgCode,
+          pendingMemberId: pendingId,
+        );
+      }
+
+      // No pending invite — join as inspector directly
+      final member = OrgMember(
+        userId: uid,
+        email: email,
+        displayName: auth.displayName,
+        role: invitedRole,
+      );
+      await membersRef.doc(uid).set(member.toJson());
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .set({'orgId': orgCode}, SetOptions(merge: true));
+
+      AuditService.instance.log(
+        action: AuditAction.memberInvited,
+        targetId: uid,
+        description: 'Joined org $orgCode via code as ${invitedRole.name}',
+      );
+
+      await loadForCurrentUser();
+      return true;
+    } catch (e) {
+      debugPrint('[OrgService] joinByCode failed: $e');
       return false;
     }
   }

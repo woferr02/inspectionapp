@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:health_safety_inspection/routes.dart';
 import 'package:health_safety_inspection/data/inspection_store.dart';
 import 'package:health_safety_inspection/services/auth_service.dart';
+import 'package:health_safety_inspection/services/org_service.dart';
 import 'package:health_safety_inspection/services/revenuecat_service.dart';
 import 'package:health_safety_inspection/services/site_store.dart';
 import 'package:health_safety_inspection/theme/app_colors.dart';
@@ -72,10 +73,10 @@ class _LoginScreenState extends State<LoginScreen>
       if (AuthService.instance.currentUser != null && mounted) {
         await _postLogin();
         if (mounted) {
-          final dest = AuthService.instance.onboardingComplete
-              ? Routes.dashboard
-              : Routes.onboarding;
-          Navigator.pushReplacementNamed(context, dest);
+          final dest = await _postLoginDestination();
+          if (dest.isNotEmpty && mounted) {
+            Navigator.pushReplacementNamed(context, dest);
+          }
         }
       }
     });
@@ -85,10 +86,27 @@ class _LoginScreenState extends State<LoginScreen>
   Future<void> _postLogin() async {
     await InspectionStore.instance.loadForCurrentUser();
     await SiteStore.instance.loadForCurrentUser();
+    await OrgService.instance.loadForCurrentUser();
     final uid = AuthService.instance.currentUser?.uid;
     if (uid != null) {
       await RevenueCatService.instance.identify(uid);
     }
+  }
+
+  /// Determine destination after login: onboarding, join-org, or dashboard.
+  Future<String> _postLoginDestination() async {
+    if (!AuthService.instance.onboardingComplete) return Routes.onboarding;
+
+    // If user has no org, check for pending invites
+    if (AuthService.instance.orgId.isEmpty) {
+      final invite = await OrgService.instance.checkPendingInvites();
+      if (invite != null && mounted) {
+        Navigator.pushReplacementNamed(context, Routes.joinOrg, arguments: invite);
+        return ''; // Already navigated
+      }
+    }
+
+    return Routes.dashboard;
   }
 
   @override
@@ -110,10 +128,10 @@ class _LoginScreenState extends State<LoginScreen>
       if (!mounted) return;
       await _postLogin();
       if (!mounted) return;
-      final dest = AuthService.instance.onboardingComplete
-          ? Routes.dashboard
-          : Routes.onboarding;
-      Navigator.pushReplacementNamed(context, dest);
+      final dest = await _postLoginDestination();
+      if (dest.isNotEmpty && mounted) {
+        Navigator.pushReplacementNamed(context, dest);
+      }
     } catch (error) {
       if (!mounted) return;
       setState(() {
@@ -146,10 +164,10 @@ class _LoginScreenState extends State<LoginScreen>
       if (!mounted) return;
       await _postLogin();
       if (!mounted) return;
-      final dest = AuthService.instance.onboardingComplete
-          ? Routes.dashboard
-          : Routes.onboarding;
-      Navigator.pushReplacementNamed(context, dest);
+      final dest = await _postLoginDestination();
+      if (dest.isNotEmpty && mounted) {
+        Navigator.pushReplacementNamed(context, dest);
+      }
     } catch (e) {
       if (!mounted) return;
       final msg = e.toString();

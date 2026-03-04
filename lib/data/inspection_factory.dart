@@ -250,7 +250,7 @@ class InspectionFactory {
     }
 
     // ── General (cross-industry) ──
-    if (name.contains('fire')) {
+    if (name.contains('fire') && !key.contains('uk regulatory')) {
       return ['Fire Extinguishers', 'Fire Alarms & Detection', 'Evacuation Routes', 'Fire Doors & Barriers'];
     }
     if (name.contains('electrical')) {
@@ -280,7 +280,7 @@ class InspectionFactory {
     if (name.contains('emergency')) {
       return ['Evacuation Drills', 'Assembly Points', 'Communication Plans', 'Emergency Equipment'];
     }
-    if (name.contains('manual handling')) {
+    if (name.contains('manual handling') && !key.contains('uk regulatory')) {
       return ['Lifting Techniques', 'Load Weights', 'Mechanical Aids', 'Training Records'];
     }
     if (name.contains('contractor')) {
@@ -329,6 +329,57 @@ class InspectionFactory {
       // Scaffold Inspection (NASC TG20 / WAH 2005)
       if (name.contains('scaffold') || name.contains('nasc')) {
         return ['Foundations & Base Plates', 'Standards, Ledgers & Couplers', 'Bracing & Tie Patterns', 'Scaffold Boards & Decking', 'Edge Protection & Ladder Access'];
+      }
+
+      // ── UK Industry-Specific Compliance (uk9–uk20) ──
+
+      // Fire Risk Assessment (RRO 2005)
+      if (name.contains('fire risk assessment')) {
+        return ['Fire Risk Assessment', 'Fire Alarms & Detection', 'Evacuation Routes', 'Fire Doors & Barriers', 'Fire Training & Drills'];
+      }
+      // DSE Workstation Assessment (HSE Regs 1992)
+      if (name.contains('dse workstation')) {
+        return ['DSE Workstation', 'Display Equipment', 'Seating & Posture', 'Lighting Levels'];
+      }
+      // Gas Safety Check (GSIUR 1998)
+      if (name.contains('gas safety')) {
+        return ['Gas Safety', 'Flue & Ventilation', 'CO Detection & Certificate'];
+      }
+      // Electricity at Work (EWR 1989)
+      if (name.contains('electricity at work')) {
+        return ['Electricity at Work', 'PAT Testing', 'Isolation Procedures', 'RCD Protection'];
+      }
+      // Noise at Work (CNW Regs 2005)
+      if (name.contains('noise at work')) {
+        return ['Noise at Work', 'Hearing Protection', 'Noise Dosimetry'];
+      }
+      // Vibration at Work (CVW Regs 2005)
+      if (name.contains('vibration at work')) {
+        return ['Vibration at Work', 'Vibration Exposure', 'Health Surveillance'];
+      }
+      // Manual Handling Assessment (MHO Regs 1992)
+      if (name.contains('manual handling')) {
+        return ['Manual Handling Assessment', 'Mechanical Aids', 'Training Records'];
+      }
+      // Food Hygiene Inspection (FH Regs 2006)
+      if (name.contains('food hygiene')) {
+        return ['Food Hygiene', 'Temperature Logs', 'Cross-Contamination', 'Staff Hygiene', 'Pest Control'];
+      }
+      // RIDDOR Incident Investigation
+      if (name.contains('riddor')) {
+        return ['RIDDOR Incident', 'Scene Preservation & Witnesses', 'Root Cause & Corrective Actions'];
+      }
+      // COSHH Assessment (COSHH Regs 2002)
+      if (name.contains('coshh assessment')) {
+        return ['COSHH Assessment', 'Chemical Storage', 'Exposure Controls', 'Health Surveillance'];
+      }
+      // Construction Phase Plan Review (CDM 2015 Reg 12)
+      if (name.contains('construction phase plan')) {
+        return ['Construction Phase Plan', 'Site Rules & Induction', 'Emergency Procedures'];
+      }
+      // Workplace Transport Safety (HSG136)
+      if (name.contains('workplace transport')) {
+        return ['Workplace Transport', 'Pedestrian Safety', 'Loading & Unloading'];
       }
     }
 

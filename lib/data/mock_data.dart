@@ -526,5 +526,33 @@ class MockData {
       description: 'Asbestos management per Health and Safety at Work (Asbestos) Regulations 2016: asbestos management plan, register, identification, exposure prevention, removal, and clearance', lastUpdated: 'Mar 2026'),
     Template(id: 'nz5', name: 'Construction Site Safety (HSW Regs Part 4)', industry: 'Construction', category: 'NZ HSWA', questionCount: 25, country: 'NZ',
       description: 'Construction work per HSW Regulations Part 4: principal contractor duties, site access, notifiable work, excavation, demolition, and traffic management', lastUpdated: 'Mar 2026'),
+
+    // ════════════════════════════════════════════════
+    // UK Industry-Specific — common compliance templates
+    // ════════════════════════════════════════════════
+    Template(id: 'uk9', name: 'Fire Risk Assessment (RRO 2005)', industry: 'General', category: 'UK Regulatory', questionCount: 30, country: 'UK',
+      description: 'Regulatory Reform (Fire Safety) Order 2005 fire risk assessment: responsible person duties, fire hazard identification, people at risk, fire prevention measures, detection & warning systems, escape routes, maintenance, and emergency plan', lastUpdated: 'Mar 2026'),
+    Template(id: 'uk10', name: 'DSE Workstation Assessment (HSE Regs 1992)', industry: 'Office & Retail', category: 'UK Regulatory', questionCount: 20, country: 'UK',
+      description: 'Health and Safety (Display Screen Equipment) Regulations 1992 workstation assessment: screen position & settings, keyboard & mouse arrangement, desk & chair ergonomics, lighting & glare, work routine & breaks, and eye test provisions', lastUpdated: 'Mar 2026'),
+    Template(id: 'uk11', name: 'Gas Safety Check (GSIUR 1998)', industry: 'Hospitality', category: 'UK Regulatory', questionCount: 22, country: 'UK',
+      description: 'Gas Safety (Installation and Use) Regulations 1998: Gas Safe registered engineer check, appliance condition, flue and ventilation adequacy, gas tightness testing, emergency controls, and landlord gas safety certificate compliance', lastUpdated: 'Mar 2026'),
+    Template(id: 'uk12', name: 'Electricity at Work Inspection (EWR 1989)', industry: 'General', category: 'UK Regulatory', questionCount: 24, country: 'UK',
+      description: 'Electricity at Work Regulations 1989: fixed installation condition reports, portable appliance testing, isolation procedures, earth bonding, RCD protection, switchboard access, competent persons, and record keeping', lastUpdated: 'Mar 2026'),
+    Template(id: 'uk13', name: 'Noise at Work Assessment (CNW Regs 2005)', industry: 'Manufacturing', category: 'UK Regulatory', questionCount: 22, country: 'UK',
+      description: 'Control of Noise at Work Regulations 2005: noise exposure assessment, lower & upper exposure action values (80/85 dB), hearing protection zones, audiometric testing, noise reduction measures, and employee information', lastUpdated: 'Mar 2026'),
+    Template(id: 'uk14', name: 'Vibration at Work Assessment (CVW Regs 2005)', industry: 'Construction', category: 'UK Regulatory', questionCount: 20, country: 'UK',
+      description: 'Control of Vibration at Work Regulations 2005: HAV & WBV exposure assessment, exposure action & limit values, tool inventory and vibration magnitudes, health surveillance, and risk reduction measures', lastUpdated: 'Mar 2026'),
+    Template(id: 'uk15', name: 'Manual Handling Assessment (MHO Regs 1992)', industry: 'General', category: 'UK Regulatory', questionCount: 22, country: 'UK',
+      description: 'Manual Handling Operations Regulations 1992: TILE assessment (Task, Individual, Load, Environment), risk reduction hierarchy, mechanical aids, training records, and handling technique observation', lastUpdated: 'Mar 2026'),
+    Template(id: 'uk16', name: 'Food Hygiene Inspection (FH Regs 2006)', industry: 'Hospitality', category: 'UK Regulatory', questionCount: 28, country: 'UK',
+      description: 'Food Hygiene (England) Regulations 2006 / EC 852/2004: HACCP documented system, temperature monitoring, food storage & labelling, pest control, staff hygiene & training, cleaning schedules, allergen management, and waste disposal', lastUpdated: 'Mar 2026'),
+    Template(id: 'uk17', name: 'RIDDOR Incident Investigation', industry: 'General', category: 'UK Regulatory', questionCount: 24, country: 'UK',
+      description: 'Reporting of Injuries, Diseases and Dangerous Occurrences Regulations 2013 investigation: incident classification, root cause analysis, witness statements, immediate & underlying causes, corrective actions, and regulatory notification checklist', lastUpdated: 'Mar 2026'),
+    Template(id: 'uk18', name: 'COSHH Assessment (COSHH Regs 2002)', industry: 'General', category: 'UK Regulatory', questionCount: 26, country: 'UK',
+      description: 'Control of Substances Hazardous to Health Regulations 2002: substance inventory, hazard classification, exposure routes & controls, health surveillance, LEV checks, PPE provision, SDS availability, and COSHH assessment review schedule', lastUpdated: 'Mar 2026'),
+    Template(id: 'uk19', name: 'Construction Phase Plan Review (CDM 2015 Reg 12)', industry: 'Construction', category: 'UK Regulatory', questionCount: 26, country: 'UK',
+      description: 'CDM 2015 Regulation 12 construction phase plan review: project description, management arrangements, site rules, specific risks & controls, welfare provisions, site induction, emergency procedures, and monitoring arrangements', lastUpdated: 'Mar 2026'),
+    Template(id: 'uk20', name: 'Workplace Transport Safety', industry: 'Logistics & Warehousing', category: 'UK Regulatory', questionCount: 24, country: 'UK',
+      description: 'HSG136 workplace transport safety: traffic routes & separation, pedestrian walkways, vehicle speed controls, visibility & lighting, reversing procedures, loading/unloading safety, driver competence, and site rules', lastUpdated: 'Mar 2026'),
   ];
 }
