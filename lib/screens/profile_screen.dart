@@ -149,15 +149,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: SingleChildScrollView(
                 child: AppViewport(
                   padding: const EdgeInsets.fromLTRB(
+                    AppSpacing.x2,
+                    AppSpacing.x2,
+                    AppSpacing.x2,
                     AppSpacing.x3,
-                    AppSpacing.x3,
-                    AppSpacing.x3,
-                    AppSpacing.x4,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 8),
+                    children:
+                      [
                       Center(
                         child: Container(
                           width: 64,
@@ -177,7 +177,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: AppSpacing.x3),
+                      const SizedBox(height: AppSpacing.x2),
 
                       // ── Personal info ──
                       const FormSectionLabel(text: 'Personal information'),

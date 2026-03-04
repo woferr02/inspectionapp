@@ -121,10 +121,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: SingleChildScrollView(
                 child: AppViewport(
                   padding: const EdgeInsets.fromLTRB(
+                    AppSpacing.x2,
+                    AppSpacing.x2,
+                    AppSpacing.x2,
                     AppSpacing.x3,
-                    AppSpacing.x3,
-                    AppSpacing.x3,
-                    AppSpacing.x4,
                   ),
                   child: Column(
                     children: [
@@ -323,10 +323,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Column(
                             children: [
-                              _buildNavRow(context, "Default template",
-                                  onTap: () => Navigator.pushNamed(
-                                      context, Routes.templates)),
-                              _dividerInner(context),
                               _buildToggleRow(
                                 context,
                                 "Auto-save",
@@ -408,40 +404,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     InspectionStore.instance.inspections,
                                   );
                                 },
-                              ),
-                              _dividerInner(context),
-                              _buildNavRow(
-                                context,
-                                "Analytics",
-                                onTap: () => Navigator.pushNamed(
-                                    context, Routes.analytics),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: AppSpacing.x2),
-
-                      // ── TEAM ──
-                      SectionBlock(
-                        title: "TEAM",
-                        margin: EdgeInsets.zero,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Column(
-                            children: [
-                              _buildNavRow(
-                                context,
-                                "Organization & Team",
-                                onTap: () => Navigator.pushNamed(
-                                    context, Routes.team),
-                              ),
-                              _dividerInner(context),
-                              _buildNavRow(
-                                context,
-                                "Schedules",
-                                onTap: () => Navigator.pushNamed(
-                                    context, Routes.schedules),
                               ),
                             ],
                           ),

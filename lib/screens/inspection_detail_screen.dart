@@ -148,10 +148,10 @@ class InspectionDetailScreen extends StatelessWidget {
                   child: SingleChildScrollView(
                     child: AppViewport(
                       padding: const EdgeInsets.fromLTRB(
+                        AppSpacing.x2,
+                        AppSpacing.x2,
+                        AppSpacing.x2,
                         AppSpacing.x3,
-                        AppSpacing.x3,
-                        AppSpacing.x3,
-                        AppSpacing.x4,
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

@@ -69,22 +69,22 @@ class _SitesScreenState extends State<SitesScreen> {
                   child: SingleChildScrollView(
                     child: AppViewport(
                       padding: const EdgeInsets.fromLTRB(
-                        AppSpacing.x3,
+                        AppSpacing.x2,
+                        AppSpacing.x2,
                         AppSpacing.x2,
                         AppSpacing.x3,
-                        AppSpacing.x4,
                       ),
                       child: Column(
                         children: [
                           InputField(
-                            label: 'Search sites',
-                            hintText: 'Site name or address',
+                            label: '',
+                            hintText: 'Search sites…',
                             controller: _searchController,
                             onChanged: (_) => setState(() {}),
-                            suffixIcon: Icon(
+                            prefixIcon: Icon(
                               Icons.search,
                               size: 18,
-                              color: AppColors.textSecondary(context),
+                              color: AppColors.textTertiary(context),
                             ),
                           ),
                           const SizedBox(height: AppSpacing.x2),

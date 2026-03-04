@@ -124,52 +124,56 @@ class _InspectionsScreenState extends State<InspectionsScreen> {
                   child: SingleChildScrollView(
                     child: AppViewport(
                       padding: const EdgeInsets.fromLTRB(
-                        AppSpacing.x3,
+                        AppSpacing.x2,
+                        AppSpacing.x2,
                         AppSpacing.x2,
                         AppSpacing.x3,
-                        AppSpacing.x4,
                       ),
                       child: Column(
                         children: [
                           InputField(
-                            label: 'Search records',
-                            hintText: 'Inspection, site, or keyword',
+                            label: '',
+                            hintText: 'Search inspections…',
                             controller: _searchController,
                             onChanged: (_) => setState(() {}),
-                            suffixIcon: Icon(
+                            prefixIcon: Icon(
                               Icons.search,
                               size: 18,
-                              color: AppColors.textSecondary(context),
+                              color: AppColors.textTertiary(context),
                             ),
                           ),
-                          const SizedBox(height: AppSpacing.x2),
+                          const SizedBox(height: 10),
                           LayoutBuilder(
                             builder: (context, constraints) {
                               if (constraints.maxWidth < 720) {
-                                return Column(
+                                // Compact: horizontal row of 3 dropdowns
+                                return Row(
                                   children: [
-                                    _FilterField(
-                                      label: 'Status',
-                                      value: _statusFilter,
-                                      items: statusOptions,
-                                      onChanged: (value) =>
-                                          setState(() => _statusFilter = value),
+                                    Expanded(
+                                      child: _CompactFilter(
+                                        value: _statusFilter,
+                                        items: statusOptions,
+                                        onChanged: (value) =>
+                                            setState(() => _statusFilter = value),
+                                      ),
                                     ),
-                                    const SizedBox(height: AppSpacing.x2),
-                                    _FilterField(
-                                      label: 'Site',
-                                      value: _siteFilter,
-                                      items: siteOptions,
-                                      onChanged: (value) =>
-                                          setState(() => _siteFilter = value),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: _CompactFilter(
+                                        value: _siteFilter,
+                                        items: siteOptions,
+                                        onChanged: (value) =>
+                                            setState(() => _siteFilter = value),
+                                      ),
                                     ),
-                                    const SizedBox(height: AppSpacing.x2),
-                                    _FilterField(
-                                      label: 'Sort',
-                                      value: _sortBy,
-                                      items: sortOptions,
-                                      onChanged: (value) =>
-                                          setState(() => _sortBy = value),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: _CompactFilter(
+                                        value: _sortBy,
+                                        items: sortOptions,
+                                        onChanged: (value) =>
+                                            setState(() => _sortBy = value),
+                                      ),
                                     ),
                                   ],
                                 );
@@ -210,7 +214,7 @@ class _InspectionsScreenState extends State<InspectionsScreen> {
                               );
                             },
                           ),
-                          const SizedBox(height: AppSpacing.x2),
+                          const SizedBox(height: 10),
                           SurfaceCard(
                             padding: EdgeInsets.zero,
                             child: Column(
@@ -218,31 +222,19 @@ class _InspectionsScreenState extends State<InspectionsScreen> {
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: AppSpacing.x2,
-                                    vertical: 12,
+                                    vertical: 10,
                                   ),
                                   child: Row(
                                     children: [
-                                      Expanded(
-                                        child: Text(
-                                          '${results.length} records',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall
-                                              ?.copyWith(
-                                                color: AppColors.textSecondary(
-                                                    context),
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                        ),
-                                      ),
                                       Text(
-                                        'Quick actions',
+                                        '${results.length} record${results.length == 1 ? '' : 's'}',
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodySmall
                                             ?.copyWith(
-                                              color: AppColors.textTertiary(
+                                              color: AppColors.textSecondary(
                                                   context),
+                                              fontWeight: FontWeight.w600,
                                             ),
                                       ),
                                     ],
@@ -420,6 +412,56 @@ class _FilterField extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _CompactFilter extends StatelessWidget {
+  final String value;
+  final List<String> items;
+  final ValueChanged<String> onChanged;
+
+  const _CompactFilter({
+    required this.value,
+    required this.items,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 38,
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        border: Border.all(color: AppColors.borderColor(context)),
+        color: AppColors.surfaceColor(context),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: value,
+          isExpanded: true,
+          dropdownColor: AppColors.surfaceColor(context),
+          icon: Icon(
+            Icons.keyboard_arrow_down_rounded,
+            size: 16,
+            color: AppColors.textSecondary(context),
+          ),
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            fontWeight: FontWeight.w500,
+            color: AppColors.textPrimary(context),
+          ),
+          items: items
+              .map((item) => DropdownMenuItem<String>(
+                    value: item,
+                    child: Text(item, overflow: TextOverflow.ellipsis),
+                  ))
+              .toList(),
+          onChanged: (next) {
+            if (next != null) onChanged(next);
+          },
+        ),
+      ),
     );
   }
 }
