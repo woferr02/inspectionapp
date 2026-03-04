@@ -205,6 +205,16 @@ class AuthService {
     } catch (_) {}
   }
 
+  /// Reload cached profile fields from Firestore.
+  /// Call after the user joins an org so [_orgId] updates in-memory and
+  /// all collection refs ([inspectionsRef], [actionsRef], etc.) switch to
+  /// the org-scoped path.
+  Future<void> reloadProfile() async {
+    final uid = currentUser?.uid;
+    if (uid == null) return;
+    await _loadProfile(uid);
+  }
+
   /// Save onboarding data (job title + industry + country) to Firestore.
   Future<void> completeOnboarding({
     required String jobTitle,

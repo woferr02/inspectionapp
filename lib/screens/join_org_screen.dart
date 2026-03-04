@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:health_safety_inspection/data/inspection_store.dart';
 import 'package:health_safety_inspection/routes.dart';
+import 'package:health_safety_inspection/services/action_store.dart';
 import 'package:health_safety_inspection/services/org_service.dart';
+import 'package:health_safety_inspection/services/schedule_store.dart';
 import 'package:health_safety_inspection/services/site_store.dart';
 import 'package:health_safety_inspection/theme/app_colors.dart';
 import 'package:health_safety_inspection/widgets/app_layout.dart';
@@ -45,6 +47,8 @@ class _JoinOrgScreenState extends State<JoinOrgScreen> {
       // Reload data scoped to the new org
       await InspectionStore.instance.loadForCurrentUser();
       await SiteStore.instance.loadForCurrentUser();
+      await ActionStore.instance.loadForCurrentUser();
+      await ScheduleStore.instance.loadForCurrentUser();
       if (!mounted) return;
       AppToast.show(context, 'Joined ${invite['orgName']}!');
       Navigator.pushReplacementNamed(context, Routes.dashboard);
@@ -72,6 +76,8 @@ class _JoinOrgScreenState extends State<JoinOrgScreen> {
       if (result) {
         await InspectionStore.instance.loadForCurrentUser();
         await SiteStore.instance.loadForCurrentUser();
+        await ActionStore.instance.loadForCurrentUser();
+        await ScheduleStore.instance.loadForCurrentUser();
         if (!mounted) return;
         AppToast.show(context, 'Successfully joined organisation!');
         Navigator.pushReplacementNamed(context, Routes.dashboard);

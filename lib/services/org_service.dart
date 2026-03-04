@@ -262,6 +262,9 @@ class OrgService extends ChangeNotifier {
           .doc(uid)
           .set({'orgId': orgId}, SetOptions(merge: true));
 
+      // Refresh in-memory _orgId so all collection refs switch to org-scoped.
+      await auth.reloadProfile();
+
       AuditService.instance.log(
         action: AuditAction.memberInvited,
         targetId: uid,
@@ -338,6 +341,9 @@ class OrgService extends ChangeNotifier {
           .collection('users')
           .doc(uid)
           .set({'orgId': orgCode}, SetOptions(merge: true));
+
+      // Refresh in-memory _orgId so all collection refs switch to org-scoped.
+      await auth.reloadProfile();
 
       AuditService.instance.log(
         action: AuditAction.memberInvited,

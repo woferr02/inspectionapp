@@ -54,6 +54,7 @@ class InspectionSchedule {
         'siteId': siteId,
         'siteName': siteName,
         'frequency': frequency.name,
+        'assignee': assigneeName,
         'assigneeId': assigneeId,
         'assigneeName': assigneeName,
         'nextDue': nextDue.toIso8601String(),

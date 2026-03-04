@@ -344,6 +344,7 @@ class InspectionStore extends ChangeNotifier {
     final updatedInspection = Inspection(
       id: inspection.id,
       name: inspection.name,
+      siteId: inspection.siteId,
       siteName: inspection.siteName,
       siteAddress: inspection.siteAddress,
       date: DateTime.now(),
@@ -352,6 +353,8 @@ class InspectionStore extends ChangeNotifier {
           : InspectionStatus.inProgress,
       score: allComplete ? (overallScore ?? 100) : inspection.score,
       inspectorName: inspection.inspectorName,
+      userId: inspection.userId,
+      templateId: inspection.templateId,
       sections: updatedSections,
     );
 
@@ -391,12 +394,15 @@ class InspectionStore extends ChangeNotifier {
     final updated = Inspection(
       id: inspection.id,
       name: inspection.name,
+      siteId: inspection.siteId,
       siteName: inspection.siteName,
       siteAddress: inspection.siteAddress,
       date: DateTime.now(),
       status: InspectionStatus.submitted,
       score: inspection.score,
       inspectorName: inspection.inspectorName,
+      userId: inspection.userId,
+      templateId: inspection.templateId,
       sections: inspection.sections,
     );
 
@@ -418,12 +424,15 @@ class InspectionStore extends ChangeNotifier {
     final duplicated = Inspection(
       id: 'dup-${DateTime.now().millisecondsSinceEpoch}',
       name: '${inspection.name} (Copy)',
+      siteId: inspection.siteId,
       siteName: inspection.siteName,
       siteAddress: inspection.siteAddress,
       date: DateTime.now(),
       status: InspectionStatus.draft,
       score: null,
       inspectorName: inspection.inspectorName,
+      userId: inspection.userId,
+      templateId: inspection.templateId,
       sections: inspection.sections
           .map(
             (section) => InspectionSection(
@@ -492,12 +501,15 @@ class InspectionStore extends ChangeNotifier {
     final archived = Inspection(
       id: inspection.id,
       name: inspection.name,
+      siteId: inspection.siteId,
       siteName: inspection.siteName,
       siteAddress: inspection.siteAddress,
       date: inspection.date,
       status: InspectionStatus.archived,
       score: inspection.score,
       inspectorName: inspection.inspectorName,
+      userId: inspection.userId,
+      templateId: inspection.templateId,
       sections: inspection.sections,
     );
     _replace(archived);
