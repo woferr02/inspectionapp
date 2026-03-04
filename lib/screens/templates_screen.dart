@@ -328,7 +328,7 @@ class _IndustryCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
           color: AppColors.surfaceColor(context),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(AppRadius.md),
           border: Border.all(color: AppColors.dividerColor(context)),
         ),
         child: Row(
@@ -459,7 +459,7 @@ class _IndustryDetailScreenState extends State<_IndustryDetailScreen>
                               decoration: BoxDecoration(
                                 color:
                                     AppColors.primary.withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(AppRadius.md),
                               ),
                               child: Icon(widget.industry.icon,
                                   size: 22, color: AppColors.primary),
@@ -627,7 +627,7 @@ class _TemplateListTile extends StatelessWidget {
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: AppColors.surfaceColor(context),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(AppRadius.md),
           border: Border.all(color: AppColors.dividerColor(context)),
         ),
         child: Row(
@@ -713,7 +713,7 @@ class _CompactTemplateCard extends StatelessWidget {
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: AppColors.surfaceColor(context),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(AppRadius.md),
           border: Border.all(color: AppColors.dividerColor(context)),
         ),
         child: Column(

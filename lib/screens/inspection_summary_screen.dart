@@ -218,7 +218,7 @@ class _OverviewTab extends StatelessWidget {
                               ? AppColors.success
                               : current.statusColor)
                           .withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(AppRadius.md),
                     ),
                     child: Icon(
                       isReported

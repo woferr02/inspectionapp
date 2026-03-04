@@ -75,7 +75,7 @@ class AboutScreen extends StatelessWidget {
                               width: 56,
                               height: 56,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(AppRadius.md),
                                 color: AppColors.primary,
                               ),
                               child: const Center(
@@ -88,7 +88,7 @@ class AboutScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 16),
                             Text(
-                              "Safety Inspector",
+                              "SafeCheck Pro",
                               style: Theme.of(context).textTheme.titleLarge!.copyWith(
                                 fontWeight: FontWeight.w600,
                                 color: AppColors.textPrimary(context),
@@ -106,7 +106,7 @@ class AboutScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 32),
                       Text(
-                        "Built by SafeInspect Ltd",
+                        "Built by SafeCheck Ltd",
                         style: Theme.of(context).textTheme.bodySmall!.copyWith(
                           color: AppColors.textSecondary(context),
                         ),

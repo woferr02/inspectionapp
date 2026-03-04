@@ -156,7 +156,7 @@ class _TemplateBuilderScreenState extends State<TemplateBuilderScreen> {
                         width: double.infinity,
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(AppRadius.md),
                           border:
                               Border.all(color: AppColors.borderColor(context)),
                           color: AppColors.surfaceColor(context),

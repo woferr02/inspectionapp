@@ -240,7 +240,7 @@ class _SectionDetailScreenState extends State<SectionDetailScreen> {
                   child: Container(
                     height: 48,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(AppRadius.md),
                       border: Border.all(color: AppColors.borderColor(context)),
                       color: AppColors.backgroundColor(context),
                     ),
@@ -318,7 +318,7 @@ class _SectionDetailScreenState extends State<SectionDetailScreen> {
                       margin: EdgeInsets.only(right: i < 4 ? 8 : 0),
                       height: 48,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(AppRadius.md),
                         border: Border.all(
                           color: isSelected
                               ? AppColors.primary
@@ -378,7 +378,7 @@ class _SectionDetailScreenState extends State<SectionDetailScreen> {
                   margin: const EdgeInsets.only(bottom: 6),
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(AppRadius.md),
                     border: Border.all(
                       color: isChecked ? AppColors.primary : AppColors.borderColor(context),
                     ),
@@ -471,7 +471,7 @@ class _SectionDetailScreenState extends State<SectionDetailScreen> {
                       ),
                       const SizedBox(height: AppSpacing.x1),
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(6),
+                        borderRadius: BorderRadius.circular(AppRadius.sm),
                         child: LinearProgressIndicator(
                           minHeight: 8,
                           value: progress,

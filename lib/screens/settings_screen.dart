@@ -179,7 +179,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                                 horizontal: 8, vertical: 3),
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                                  BorderRadius.circular(6),
+                                                  BorderRadius.circular(AppRadius.sm),
                                               color: tierColor
                                                   .withValues(alpha: 0.12),
                                             ),
@@ -632,7 +632,7 @@ class _ToggleVisual extends StatelessWidget {
         width: 44,
         height: 24,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(AppRadius.md),
           color: value ? AppColors.primary : AppColors.borderColor(context),
         ),
         child: AnimatedAlign(

@@ -136,7 +136,7 @@ class _JoinOrgScreenState extends State<JoinOrgScreen> {
                                     height: 40,
                                     decoration: BoxDecoration(
                                       color: AppColors.primary.withValues(alpha: 0.1),
-                                      borderRadius: BorderRadius.circular(10),
+                                      borderRadius: BorderRadius.circular(AppRadius.md),
                                     ),
                                     child: Icon(
                                       Icons.business_rounded,

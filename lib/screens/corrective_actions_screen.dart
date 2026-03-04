@@ -160,7 +160,7 @@ class _FilterChip extends StatelessWidget {
         duration: const Duration(milliseconds: 180),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppRadius.xl),
           color: isActive
               ? activeColor.withValues(alpha: 0.12)
               : AppColors.surfaceColor(context),
@@ -318,7 +318,7 @@ class _ActionCard extends StatelessWidget {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6),
+                      borderRadius: BorderRadius.circular(AppRadius.sm),
                       color: AppColors.success.withValues(alpha: 0.1),
                     ),
                     child: Text(
@@ -343,7 +343,7 @@ class _ActionCard extends StatelessWidget {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6),
+                      borderRadius: BorderRadius.circular(AppRadius.sm),
                       color: AppColors.borderColor(context),
                     ),
                     child: Text(

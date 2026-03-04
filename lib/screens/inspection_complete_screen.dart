@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:health_safety_inspection/models/inspection.dart';
 import 'package:health_safety_inspection/routes.dart';
 import 'package:health_safety_inspection/theme/app_colors.dart';
+import 'package:health_safety_inspection/widgets/app_layout.dart';
 import 'package:health_safety_inspection/widgets/primary_button.dart';
 import 'package:health_safety_inspection/widgets/secondary_button.dart';
 
@@ -150,7 +151,7 @@ class _InspectionCompleteScreenState extends State<InspectionCompleteScreen>
                             vertical: 12,
                           ),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(AppRadius.md),
                             color: _scoreColor(score).withValues(alpha: 0.1),
                           ),
                           child: Row(

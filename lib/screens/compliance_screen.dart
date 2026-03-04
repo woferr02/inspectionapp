@@ -275,7 +275,7 @@ class _RegulationCard extends StatelessWidget {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6),
+                      borderRadius: BorderRadius.circular(AppRadius.sm),
                       color: AppColors.primary.withValues(alpha: 0.1),
                     ),
                     child: Text(
@@ -360,7 +360,7 @@ class _RegulationCard extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 5),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6),
+                          borderRadius: BorderRadius.circular(AppRadius.sm),
                           color: AppColors.primary.withValues(alpha: 0.08),
                         ),
                         child: Text(

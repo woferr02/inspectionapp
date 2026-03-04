@@ -188,7 +188,7 @@ class _LoginScreenState extends State<LoginScreen>
   Future<void> _handleForgotPassword() async {
     final email = _emailController.text.trim();
     if (email.isEmpty) {
-      setState(() => _authError = 'Enter your email first, then tap Forget Password.');
+      setState(() => _authError = 'Enter your email first, then tap Forgot password.');
       return;
     }
     try {
@@ -234,7 +234,31 @@ class _LoginScreenState extends State<LoginScreen>
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    // Title block
+                                    // Brand + Title block
+                                    Row(
+                                      children: [
+                                        Container(
+                                          width: 32,
+                                          height: 32,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(AppRadius.md),
+                                            color: AppColors.primary,
+                                          ),
+                                          child: const Center(
+                                            child: Icon(Icons.shield_outlined, size: 18, color: Colors.white),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Text(
+                                          'SafeCheck Pro',
+                                          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                                            fontWeight: FontWeight.w600,
+                                            color: AppColors.textPrimary(context),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 32),
                                     Text(
                                       'Sign In',
                                       style: Theme.of(context).extension<AppTextStyles>()!.displayHero.copyWith(
@@ -284,12 +308,10 @@ class _LoginScreenState extends State<LoginScreen>
                                     Tappable(
                                       onTap: _handleForgotPassword,
                                       child: Text(
-                                        'FORGET PASSWORD?',
+                                        'Forgot password?',
                                         style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                                          color: AppColors.textPrimary(context),
-                                          decoration: TextDecoration.underline,
-                                          decorationColor:
-                                              AppColors.textPrimary(context),
+                                          color: AppColors.textSecondary(context),
+                                          fontWeight: FontWeight.w500,
                                         ),
                                       ),
                                     ),
@@ -379,7 +401,7 @@ class _LoginScreenState extends State<LoginScreen>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    'First time here?  ',
+                                    "Don't have an account?  ",
                                     style: Theme.of(context).textTheme.labelMedium!.copyWith(
                                       fontWeight: FontWeight.w400,
                                       color: AppColors.textSecondary(context),
@@ -388,12 +410,10 @@ class _LoginScreenState extends State<LoginScreen>
                                   Tappable(
                                     onTap: () => Navigator.pushNamed(context, Routes.createAccount),
                                     child: Text(
-                                      'CREATE AN ACCOUNT',
+                                      'Create account',
                                       style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                                        color: AppColors.textPrimary(context),
-                                        decoration: TextDecoration.underline,
-                                        decorationColor:
-                                            AppColors.textPrimary(context),
+                                        color: AppColors.primary,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                   ),
@@ -451,7 +471,7 @@ class _SocialButtonState extends State<_SocialButton> {
           color: _hovered
               ? AppColors.surfaceColor(context)
               : AppColors.backgroundColor(context),
-          borderRadius: BorderRadius.circular(999),
+          borderRadius: BorderRadius.circular(AppRadius.md),
           border: Border.all(
             color: AppColors.borderColor(context),
             width: 1,
