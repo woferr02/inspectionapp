@@ -30,6 +30,8 @@ class InspectionFactory {
       date: DateTime.now(),
       status: InspectionStatus.draft,
       inspectorName: inspectorName,
+      userId: AuthService.instance.currentUser?.uid ?? '',
+      templateId: template.id,
       sections: sections,
     );
   }
