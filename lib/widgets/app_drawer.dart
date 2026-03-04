@@ -5,6 +5,7 @@ import 'package:health_safety_inspection/services/auth_service.dart';
 import 'package:health_safety_inspection/services/feature_gate.dart';
 import 'package:health_safety_inspection/services/org_service.dart';
 import 'package:health_safety_inspection/services/revenuecat_service.dart';
+import 'package:health_safety_inspection/services/site_store.dart';
 import 'package:health_safety_inspection/services/theme_notifier.dart';
 import 'package:health_safety_inspection/theme/app_colors.dart';
 import 'package:health_safety_inspection/widgets/tappable.dart';
@@ -35,6 +36,7 @@ class AppDrawer extends StatelessWidget {
 
   Future<void> _signOut(BuildContext context) async {
     Navigator.pop(context); // close drawer
+    SiteStore.instance.stopListening();
     await RevenueCatService.instance.logout();
     await AuthService.instance.signOut();
     if (context.mounted) {

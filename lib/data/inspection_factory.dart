@@ -24,6 +24,7 @@ class InspectionFactory {
     return Inspection(
       id: 'insp-${DateTime.now().millisecondsSinceEpoch}',
       name: customName ?? template.name,
+      siteId: site?.id ?? '',
       siteName: site?.name ?? 'Unassigned',
       siteAddress: site?.address ?? '',
       date: DateTime.now(),

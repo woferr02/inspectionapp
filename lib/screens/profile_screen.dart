@@ -11,6 +11,7 @@ import 'package:health_safety_inspection/widgets/tappable.dart';
 import 'package:health_safety_inspection/routes.dart';
 import 'package:health_safety_inspection/services/auth_service.dart';
 import 'package:health_safety_inspection/services/revenuecat_service.dart';
+import 'package:health_safety_inspection/services/site_store.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -85,6 +86,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _signOut() async {
+    SiteStore.instance.stopListening();
     await RevenueCatService.instance.logout();
     await AuthService.instance.signOut();
     if (!mounted) return;
