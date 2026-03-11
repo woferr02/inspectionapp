@@ -9,7 +9,7 @@ class ThemeNotifier extends ChangeNotifier {
 
   static const _key = 'theme_mode';
 
-  ThemeMode _mode = ThemeMode.light;
+  ThemeMode _mode = ThemeMode.system;
   ThemeMode get mode => _mode;
 
   bool get isDark => _mode == ThemeMode.dark;
@@ -44,7 +44,17 @@ class ThemeNotifier extends ChangeNotifier {
   Future<void> _persist() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      prefs.setString(_key, _mode == ThemeMode.dark ? 'dark' : 'light');
+      switch (_mode) {
+        case ThemeMode.dark:
+          prefs.setString(_key, 'dark');
+          break;
+        case ThemeMode.light:
+          prefs.setString(_key, 'light');
+          break;
+        case ThemeMode.system:
+          prefs.remove(_key);
+          break;
+      }
     } catch (_) {}
   }
 }

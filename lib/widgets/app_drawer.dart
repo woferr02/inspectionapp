@@ -40,7 +40,7 @@ class AppDrawer extends StatelessWidget {
     await RevenueCatService.instance.logout();
     await AuthService.instance.signOut();
     if (context.mounted) {
-      Navigator.pushReplacementNamed(context, Routes.login);
+      Navigator.pushReplacementNamed(context, Routes.welcome);
     }
   }
 

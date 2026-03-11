@@ -419,6 +419,22 @@ class _LoginScreenState extends State<LoginScreen>
                                   ),
                                 ],
                               ),
+
+                              // ── DEBUG: remove before production ──
+                              const SizedBox(height: 16),
+                              Tappable(
+                                onTap: () {
+                                  AuthService.instance.debugLogin();
+                                  Navigator.pushReplacementNamed(
+                                      context, Routes.dashboard);
+                                },
+                                child: Text(
+                                  'Dev login (skip auth)',
+                                  style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                                    color: AppColors.textTertiary(context),
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         ),

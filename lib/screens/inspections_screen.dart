@@ -110,7 +110,7 @@ class _InspectionsScreenState extends State<InspectionsScreen> {
             child: Column(
               children: [
                 PageHeader(
-                  title: 'Inspection Records',
+                  title: 'Inspections',
                   showMenuButton: true,
                   actions: [
                     PrimaryButton(
@@ -219,30 +219,6 @@ class _InspectionsScreenState extends State<InspectionsScreen> {
                             padding: EdgeInsets.zero,
                             child: Column(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: AppSpacing.x2,
-                                    vertical: 10,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        '${results.length} record${results.length == 1 ? '' : 's'}',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall
-                                            ?.copyWith(
-                                              color: AppColors.textSecondary(
-                                                  context),
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                    height: 1,
-                                    color: AppColors.dividerColor(context)),
                                 if (results.isEmpty)
                                   Padding(
                                     padding:

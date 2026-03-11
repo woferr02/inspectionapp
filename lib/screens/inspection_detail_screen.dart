@@ -242,7 +242,7 @@ class InspectionDetailScreen extends StatelessWidget {
                             ),
                           ),
 
-                          const SizedBox(height: AppSpacing.x2),
+                          const SizedBox(height: AppSpacing.x1),
                           Text(
                             'Sections',
                             style: Theme.of(context)

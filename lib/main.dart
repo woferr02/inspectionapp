@@ -52,7 +52,7 @@ class HealthSafetyApp extends StatelessWidget {
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           themeMode: themeNotifier.mode,
-          initialRoute: Routes.login,
+          initialRoute: Routes.welcome,
           onGenerateRoute: Routes.generateRoute,
         );
       },

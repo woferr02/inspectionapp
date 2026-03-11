@@ -12,7 +12,11 @@ class AuthService {
   bool _initialized = false;
   bool _available = false;
 
-  bool get isAvailable => _available;
+  /// When true, the app runs without Firebase — all data is local only.
+  bool _debugMode = false;
+  bool get isDebugMode => _debugMode;
+
+  bool get isAvailable => _available || _debugMode;
 
   Future<void> initialize() async {
     if (_initialized) return;
@@ -28,8 +32,22 @@ class AuthService {
   }
 
   User? get currentUser {
+    if (_debugMode) return _DebugUser.instance;
     if (!_available) return null;
     return FirebaseAuth.instance.currentUser;
+  }
+
+  /// Bypass Firebase entirely for local testing.
+  /// Sets up a fake user with full permissions so every screen works.
+  void debugLogin() {
+    _debugMode = true;
+    _initialized = true;
+    _onboardingComplete = true;
+    _jobTitle = 'Safety Officer';
+    _industry = 'Construction';
+    _country = 'UK';
+    _company = 'Debug Co';
+    _orgId = '';
   }
 
   /// Display name pulled from Firebase user (Google name or profile update).
@@ -166,7 +184,7 @@ class AuthService {
 
   /// Writes or merges the authenticated user's profile to Firestore.
   Future<void> _writeUserProfile(User? user) async {
-    if (user == null || !_available) return;
+    if (user == null || !_available || _debugMode) return;
     try {
       await FirebaseFirestore.instance
           .collection('users')
@@ -187,7 +205,7 @@ class AuthService {
 
   /// Load profile fields (jobTitle, industry, onboardingComplete) from Firestore.
   Future<void> _loadProfile(String uid) async {
-    if (!_available) return;
+    if (!_available || _debugMode) return;
     try {
       final doc = await FirebaseFirestore.instance
           .collection('users')
@@ -282,13 +300,15 @@ class AuthService {
   /// Convenience: reference to the current user's document.
   DocumentReference? get userDoc {
     final user = currentUser;
-    if (user == null || !_available) return null;
+    if (user == null || (!_available && !_debugMode)) return null;
+    if (_debugMode) return null;
     return FirebaseFirestore.instance.collection('users').doc(user.uid);
   }
 
   /// The org-level document when the user belongs to an organization.
   DocumentReference? get _orgDoc {
-    if (_orgId.isEmpty || !_available) return null;
+    if (_orgId.isEmpty || (!_available && !_debugMode)) return null;
+    if (_debugMode) return null;
     return FirebaseFirestore.instance.collection('organizations').doc(_orgId);
   }
 
@@ -314,4 +334,74 @@ class AuthService {
   CollectionReference? get sitesRef {
     return _dataRoot?.collection('sites');
   }
+}
+
+/// Minimal fake [User] for debug mode — avoids Firebase dependency entirely.
+class _DebugUser implements User {
+  _DebugUser._();
+  static final _DebugUser instance = _DebugUser._();
+
+  @override
+  String get uid => 'debug-user-001';
+  @override
+  String? get displayName => 'Test User';
+  @override
+  String? get email => 'debug@safecheck.app';
+  @override
+  String? get photoURL => null;
+  @override
+  bool get emailVerified => true;
+  @override
+  bool get isAnonymous => false;
+  @override
+  String? get phoneNumber => null;
+  @override
+  String? get refreshToken => null;
+  @override
+  String? get tenantId => null;
+  @override
+  List<UserInfo> get providerData => [];
+  @override
+  UserMetadata get metadata => throw UnimplementedError();
+
+  @override
+  Future<String> getIdToken([bool forceRefresh = false]) async => 'debug-token';
+  @override
+  Future<IdTokenResult> getIdTokenResult([bool forceRefresh = false]) =>
+      throw UnimplementedError();
+  @override
+  Future<void> reload() async {}
+  @override
+  Future<void> delete() async {}
+  @override
+  Future<UserCredential> linkWithCredential(AuthCredential credential) =>
+      throw UnimplementedError();
+  @override
+  Future<UserCredential> reauthenticateWithCredential(
+          AuthCredential credential) =>
+      throw UnimplementedError();
+  @override
+  Future<User> unlink(String providerId) => throw UnimplementedError();
+  @override
+  Future<void> updateDisplayName(String? name) async {}
+  @override
+  Future<void> updateEmail(String email) async {}
+  @override
+  Future<void> updatePassword(String password) async {}
+  @override
+  Future<void> updatePhotoURL(String? url) async {}
+  @override
+  Future<void> updatePhoneNumber(PhoneAuthCredential credential) async {}
+  @override
+  Future<void> sendEmailVerification(
+      [ActionCodeSettings? actionCodeSettings]) async {}
+  @override
+  Future<void> verifyBeforeUpdateEmail(String newEmail,
+      [ActionCodeSettings? actionCodeSettings]) async {}
+  @override
+  MultiFactor get multiFactor => throw UnimplementedError();
+
+  // ignore any other unimplemented members
+  @override
+  dynamic noSuchMethod(Invocation invocation) => null;
 }

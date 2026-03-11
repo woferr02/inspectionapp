@@ -67,7 +67,7 @@ class AboutScreen extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      const SizedBox(height: 48),
+                      const SizedBox(height: 24),
                       Center(
                         child: Column(
                           children: [
@@ -104,14 +104,14 @@ class AboutScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 20),
                       Text(
                         "Built by SafeCheck Ltd",
                         style: Theme.of(context).textTheme.bodySmall!.copyWith(
                           color: AppColors.textSecondary(context),
                         ),
                       ),
-                      const SizedBox(height: 48),
+                      const SizedBox(height: 24),
                       _buildTappableRow(context, "Website"),
                       _buildTappableRow(context, "Support"),
                       _buildTappableRow(context, "Terms of Service"),

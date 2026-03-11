@@ -90,7 +90,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     await RevenueCatService.instance.logout();
     await AuthService.instance.signOut();
     if (!mounted) return;
-    Navigator.pushReplacementNamed(context, Routes.login);
+    Navigator.pushReplacementNamed(context, Routes.welcome);
   }
 
   @override
@@ -280,20 +280,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
 
-                      const SizedBox(height: AppSpacing.x3),
-                      SecondaryButton(
-                        text: "Change password",
-                        onPressed: () async {
-                          final email = AuthService.instance.email;
-                          if (email.isNotEmpty) {
-                            try {
-                              await AuthService.instance
-                                  .sendPasswordReset(email);
-                            } catch (_) {}
-                          }
-                        },
-                        width: double.infinity,
-                      ),
                       const SizedBox(height: AppSpacing.x4),
                       Center(
                         child: Tappable(

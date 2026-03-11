@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:health_safety_inspection/data/inspection_store.dart';
-import 'package:intl/intl.dart';
 import 'package:health_safety_inspection/models/inspection.dart';
 import 'package:health_safety_inspection/routes.dart';
 import 'package:health_safety_inspection/theme/app_colors.dart';
+import 'package:health_safety_inspection/services/feature_gate.dart';
 import 'package:health_safety_inspection/widgets/app_layout.dart';
 import 'package:health_safety_inspection/widgets/new_inspection_sheet.dart';
 import 'package:health_safety_inspection/widgets/page_header.dart';
 import 'package:health_safety_inspection/widgets/primary_button.dart';
-import 'package:health_safety_inspection/services/auth_service.dart';
 import 'package:health_safety_inspection/widgets/surface_card.dart';
 import 'package:health_safety_inspection/widgets/tappable.dart';
 
@@ -16,6 +15,19 @@ class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
   void _startInspection(BuildContext context) async {
+    // Enforce free-tier inspection limit
+    final limit = FeatureGate.maxInspections;
+    if (limit != null) {
+      final active = InspectionStore.instance.inspections
+          .where((i) => i.status != InspectionStatus.archived)
+          .length;
+      if (active >= limit) {
+        FeatureGate.guardOr(
+            context, Feature.unlimitedInspections, () {});
+        return;
+      }
+    }
+
     final inspection = await showNewInspectionSheet(context);
     if (inspection != null && context.mounted) {
       Navigator.pushNamed(
@@ -24,19 +36,6 @@ class DashboardScreen extends StatelessWidget {
         arguments: inspection,
       );
     }
-  }
-
-  String get _greeting {
-    final hour = DateTime.now().hour;
-    if (hour < 12) return 'Good morning';
-    if (hour < 17) return 'Good afternoon';
-    return 'Good evening';
-  }
-
-  String get _firstName {
-    final name = AuthService.instance.displayName;
-    if (name.isEmpty) return '';
-    return name.split(' ').first;
   }
 
   @override
@@ -63,17 +62,7 @@ class DashboardScreen extends StatelessWidget {
           body: SafeArea(
             child: Column(
               children: [
-                PageHeader(
-                  title: 'Home',
-                  showMenuButton: true,
-                  actions: [
-                    PrimaryButton(
-                      text: 'New',
-                      height: 36,
-                      onPressed: () => _startInspection(context),
-                    ),
-                  ],
-                ),
+                const PageHeader(title: 'Home', showMenuButton: true),
                 Expanded(
                   child: SingleChildScrollView(
                     child: AppViewport(
@@ -86,30 +75,21 @@ class DashboardScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // ── Minimal greeting ──
-                          Text(
-                            '$_greeting${_firstName.isNotEmpty ? ', $_firstName' : ''}',
-                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.textPrimary(context),
-                            ),
+                          // ── Primary CTA ──
+                          PrimaryButton(
+                            text: 'Start inspection',
+                            width: double.infinity,
+                            onPressed: () => _startInspection(context),
                           ),
-                          const SizedBox(height: 2),
-                          Text(
-                            DateFormat('EEEE, d MMM').format(DateTime.now()),
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: AppColors.textTertiary(context),
-                            ),
-                          ),
-                          const SizedBox(height: AppSpacing.x3),
 
                           // ── In-progress / drafts ──
                           if (drafts.isNotEmpty) ...[
+                            const SizedBox(height: AppSpacing.x2),
                             _SectionLabel(
-                              text: 'Continue',
+                              text: 'In progress',
                               trailing: '${drafts.length}',
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 6),
                             SurfaceCard(
                               padding: EdgeInsets.zero,
                               child: Column(
@@ -138,7 +118,7 @@ class DashboardScreen extends StatelessWidget {
                             ),
                             if (drafts.length > 5)
                               Padding(
-                                padding: const EdgeInsets.only(top: 8),
+                                padding: const EdgeInsets.only(top: 6),
                                 child: Tappable(
                                   onTap: () => Navigator.pushNamed(context, Routes.inspections),
                                   child: Text(
@@ -150,29 +130,17 @@ class DashboardScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                            const SizedBox(height: AppSpacing.x3),
                           ],
 
                           // ── Recent completions ──
-                          _SectionLabel(
-                            text: 'Recent',
-                            trailing: recent.isEmpty ? null : 'All',
-                            onTrailingTap: recent.isEmpty ? null : () => Navigator.pushNamed(context, Routes.inspections),
-                          ),
-                          const SizedBox(height: 8),
-                          if (recent.isEmpty)
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 32),
-                              child: Center(
-                                child: Text(
-                                  'No completed inspections yet',
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: AppColors.textTertiary(context),
-                                  ),
-                                ),
-                              ),
-                            )
-                          else
+                          if (recent.isNotEmpty) ...[
+                            const SizedBox(height: AppSpacing.x2),
+                            _SectionLabel(
+                              text: 'Recent',
+                              trailing: 'All',
+                              onTrailingTap: () => Navigator.pushNamed(context, Routes.inspections),
+                            ),
+                            const SizedBox(height: 6),
                             SurfaceCard(
                               padding: EdgeInsets.zero,
                               child: Column(
@@ -198,6 +166,21 @@ class DashboardScreen extends StatelessWidget {
                                     ],
                                   );
                                 }).toList(),
+                              ),
+                            ),
+                          ],
+
+                          // ── Empty state ──
+                          if (drafts.isEmpty && recent.isEmpty)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: AppSpacing.x3),
+                              child: Center(
+                                child: Text(
+                                  'No inspections yet — tap above to start.',
+                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: AppColors.textTertiary(context),
+                                  ),
+                                ),
                               ),
                             ),
                         ],
@@ -269,7 +252,7 @@ class _InspectionRow extends StatelessWidget {
     return Tappable(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         child: Row(
           children: [
             // Status dot

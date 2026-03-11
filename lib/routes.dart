@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/login_screen.dart';
-import 'screens/create_account_screen.dart';
+import 'screens/welcome_screen.dart';
 import 'screens/inspection_detail_screen.dart';
 import 'screens/section_detail_screen.dart';
 import 'screens/inspection_summary_screen.dart';
@@ -25,7 +24,8 @@ import 'models/site.dart';
 import 'services/feature_gate.dart';
 
 class Routes {
-  static const String login = '/login';
+  static const String welcome = '/';
+  static const String login = '/login'; // redirects to welcome
   static const String dashboard = '/dashboard';
   static const String inspections = '/inspections';
   static const String inspectionDetail = '/inspection-detail';
@@ -38,7 +38,7 @@ class Routes {
   static const String settings = '/settings';
   static const String profile = '/profile';
   static const String about = '/about';
-  static const String createAccount = '/create-account';
+  // createAccount removed — Google-only auth
   static const String onboarding = '/onboarding';
   static const String analytics = '/analytics';
   static const String correctiveActions = '/corrective-actions';
@@ -55,10 +55,10 @@ class Routes {
 
   static Route<dynamic> generateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
+      case welcome:
+        return MaterialPageRoute(builder: (_) => const WelcomeScreen());
       case login:
-        return MaterialPageRoute(builder: (_) => const LoginScreen());
-      case createAccount:
-        return MaterialPageRoute(builder: (_) => const CreateAccountScreen());
+        return MaterialPageRoute(builder: (_) => const WelcomeScreen());
       case onboarding:
         return MaterialPageRoute(builder: (_) => const OnboardingScreen());
       case dashboard:
